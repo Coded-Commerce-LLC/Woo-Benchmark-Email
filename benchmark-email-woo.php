@@ -17,7 +17,9 @@ require_once( 'class.frontend.php' );
 
 // Front End Hooks
 add_action( 'init', array( 'bmew_frontend', 'init_contact_lists' ) );
-add_action( 'woocommerce_after_checkout_validation', array( 'bmew_frontend', 'woocommerce_after_checkout_validation' ) );
+//add_action( 'woocommerce_after_checkout_validation', array( 'bmew_frontend', 'woocommerce_after_checkout_validation' ) );
+add_action( 'woocommerce_checkout_update_order_meta', array( 'bmew_frontend', 'woocommerce_checkout_update_order_meta' ) );
+add_filter( 'woocommerce_checkout_fields' , array( 'bmew_frontend', 'woocommerce_checkout_fields' ) );
 
 // Admin Hooks
 add_filter( 'woocommerce_get_sections_advanced', array( 'bmew_admin', 'woocommerce_get_sections_advanced' ) );
