@@ -31,20 +31,34 @@ class bmew_admin {
 			return $settings;
 		}
 
-		$settings = array();
+		// Response Data
+		return array(
 
-		// Add Title To The Settings
-		$settings[] = array( 'desc' => '', 'id' => 'bmew', 'name' => 'Benchmark Email', 'type' => 'title' );
+			// Add Section Title
+			array( 'desc' => '', 'id' => 'bmew', 'name' => 'Benchmark Email', 'type' => 'title' ),
 
-		// Add Text Field Option
-		$settings[] = array(
-			'desc_tip' => __( 'Log into https://ui.benchmarkemail.com', 'bmew' ),
-			'desc' => '<br>' . __( 'Enter your API Key from your Benchmark Email account.', 'bmew' ),
-			'id' => 'bmew_key',
-			'name' => __( 'API Key', 'bmew' ),
-			'type' => 'text',
+			// Add API Key Field
+			array(
+				'desc_tip' => __( 'Log into https://ui.benchmarkemail.com and copy your API key here.', 'bmew' ),
+				'desc' => '<br>' . __( 'API Key from your Benchmark Email account', 'bmew' ),
+				'id' => 'bmew_key',
+				'name' => __( 'API Key', 'bmew' ),
+				'type' => 'text',
+			),
+
+			// Add Text Field Option
+			array(
+				'default' => __( 'Opt-in to receive exclusive customer communications', 'bmew' ),
+				'desc_tip' => __( 'Label for checkout form opt-in checkbox field.', 'bmew' ) . ' '
+					. __( 'Leave this setting blank to eliminate the opt-in field from your checkout form.', 'bmew' ),
+				'desc' => '<br>' . __( 'Checkout form opt-in field label', 'bmew' ),
+				'id' => 'bmew_checkout_optin_label',
+				'name' => __( 'Checkout Opt-In Field', 'bmew' ),
+				'type' => 'text',
+			),
+
+			// End Section
+			array( 'id' => 'bmew', 'type' => 'sectionend' ),
 		);
-		$settings[] = array( 'id' => 'bmew', 'type' => 'sectionend' );
-		return $settings;
 	}
 }

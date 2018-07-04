@@ -45,14 +45,24 @@ class bmew_frontend {
 
 	// Filter WooCommerce Checkout Fields
 	static function woocommerce_checkout_fields( $fields ) {
+
+		// Get Opt-In Field Label Setting
+		$bmew_checkout_optin_label = get_option( 'bmew_checkout_optin_label' );
+
+		// If Opt-In Unset, Skip It
+		if( ! $bmew_checkout_optin_label ) { return $fields; }
+
+		// Add Opt-In Form Field
 		$fields['billing']['bmew_subscribe'] = array(
 			'class' => array( 'form-row-wide' ),
 			'default' => true,
-			'label' => __( 'Subscribe to our Customers email list?', 'bmew' ),
+			'label' => $bmew_checkout_optin_label,
 			'priority' => 120,
 			'required' => false,
 			'type' => 'checkbox',
     	);
+
+    	// Return Data
 		return $fields;
 	}
 
