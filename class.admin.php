@@ -5,16 +5,15 @@ class bmew_admin {
 
 	// Admin Dashboard Test Function
 	static function wp_dashboard_setup() {
-		$response = 'Placeholder';
-		$response = get_option( 'bmew_lists' );
+		//$response = get_option( 'bmew_lists' );
 		//$response = bmew_api::add_list( 'WooCommerce Customers' );
 		//$response = bmew_api::get_lists();
 		//$response = bmew_api::get_contact( 3649970, 211633335 );
 		//$response = bmew_api::add_contact( 3649970, 'sean+test04@codedcommerce.com', 'Tester', 'Testing' );
-		echo sprintf(
-			'<div class="notice notice-info is-dismissible"><p><pre>%s</pre></p></div>',
-			print_r( $response, true )
-		);
+		//echo sprintf(
+		//	'<div class="notice notice-info is-dismissible"><p><pre>%s</pre></p></div>',
+		//	print_r( $response, true )
+		//);
 	}
 
 	// Create The Section Beneath The Advanced Tab
@@ -30,6 +29,16 @@ class bmew_admin {
 		if( ! isset( $_REQUEST['section'] ) || $_REQUEST['section'] != 'bmew' ) {
 			return $settings;
 		}
+
+		// Output Sync UI
+		echo '
+			<div class="notice notice-info is-dismissible">
+				<p>
+					<a id="sync_customers" class="button" href="#">Sync Customers to Benchmark Email</a>
+				</p>
+				<p id="sync_progress"></p>
+			</div>
+		';
 
 		// Response Data
 		return array(
@@ -60,5 +69,48 @@ class bmew_admin {
 			// End Section
 			array( 'id' => 'bmew', 'type' => 'sectionend' ),
 		);
+	}
+
+	// AJAX JavaScript
+	static function admin_enqueue_scripts() {
+		wp_enqueue_script( 'bmew_admin', plugin_dir_url( __FILE__ ) . 'admin.js', array( 'jquery' ), null );
+	}
+
+	// AJAX Submit
+	static function wp_ajax_bmew_action() {
+
+		// Find Appropriate Contact List
+		$listID = bmew_frontend::match_list( 'customers' );
+		if( ! $listID ) { return; }
+
+		// Query Orders
+		$page = empty( $_POST['page'] ) ? 1 : intval( $_POST['page'] );
+		$args = array(
+			'limit' => 10,
+			'page' => $page,
+			'orderby' => 'ID',
+			'order' => 'DESC',
+			'return' => 'ids',
+		);
+		$query = new WC_Order_Query( $args );
+		$orders = $query->get_orders();
+
+		// Loop Results
+		foreach( $orders as $post_id ) {
+
+			// Get Fields From Order
+			$email = get_post_meta( $post_id, '_billing_email', true );
+			$first = get_post_meta( $post_id, '_billing_first_name', true );
+			$last = get_post_meta( $post_id, '_billing_last_name', true );
+
+			// Exit If No Email Provided
+			if( ! $email ) { continue; }
+
+			// Add Contact To List
+			bmew_api::add_contact( $listID, $email, $first, $last );
+		}
+		if( ! $orders ) { $page = 0; }
+		echo $page;
+		wp_die();
 	}
 }
