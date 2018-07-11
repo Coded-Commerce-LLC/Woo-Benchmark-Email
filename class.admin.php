@@ -22,6 +22,30 @@ class bmew_admin {
 		return $sections;
 	}
 
+	// Output Sync UI
+	static function woocommerce_settings_bmew() {
+		echo '
+			<div class="notice notice-info is-dismissible">
+				<p>
+					<a id="sync_customers" class="button" href="#">Sync Customers to Benchmark Email</a>
+				</p>
+				<p>
+					<span id="sync_in_progress" style="display:none;">
+						' . sprintf(
+							"<strong>%s</strong> %s",
+							__( 'Please wait.', 'bmew' ),
+							__( 'Syncing at 10 orders per page, completed pages...', 'bmew' )
+						) . '
+					</span>
+					<span id="sync_progress_bar"></span>
+					<span id="sync_complete" style="display:none;">
+						' . __( 'Finished Customer Sync.', 'bmew' ) . '
+					</span>
+				</p>
+			</div>
+		';
+	}
+
 	// Create The Setting Within The Custom Section
 	static function woocommerce_get_settings_advanced( $settings ) {
 
@@ -29,16 +53,6 @@ class bmew_admin {
 		if( ! isset( $_REQUEST['section'] ) || $_REQUEST['section'] != 'bmew' ) {
 			return $settings;
 		}
-
-		// Output Sync UI
-		echo '
-			<div class="notice notice-info is-dismissible">
-				<p>
-					<a id="sync_customers" class="button" href="#">Sync Customers to Benchmark Email</a>
-				</p>
-				<p id="sync_progress"></p>
-			</div>
-		';
 
 		// Response Data
 		return array(

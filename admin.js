@@ -5,30 +5,36 @@ var bmew_page = 1;
 // On Button Click
 jQuery( document ).ready( function( $ ) {
 	$( '#sync_customers' ).click( function() {
-		$( '#sync_progress' ).text( 'Syncing at 10 orders per page, completed:' );
+		$( '#sync_complete' ).hide();
+		$( '#sync_progress_bar' ).empty();
+		$( '#sync_in_progress' ).show();
 		bmew_page = 1;
-		bmew_query();
+		bmew_query( $ );
 	} );
 } );
 
 // AJAX Caller
-function bmew_query() {
+function bmew_query( $ ) {
 	var data = {
 		'action': 'bmew_action',
 		'sync': 'sync_customers',
 		'page': bmew_page
 	};
-	jQuery.post( ajaxurl, data, function( response ) {
+	$.post( ajaxurl, data, function( response ) {
 
-		// Continue To Next Page
-		if( response > 0 ) {
-
-			// Display Page Processed
-			jQuery( '#sync_progress' ).append( ' ' + response );
-
-			// Advance
-			bmew_page ++;
-			bmew_query();
+		// Handle Completion
+		if( response == 0 ) {
+			$( '#sync_in_progress' ).hide();
+			$( '#sync_progress_bar' ).empty();
+			$( '#sync_complete' ).show();
+			return;
 		}
+
+		// Display Page Processed
+		$( '#sync_progress_bar' ).append( ' ' + response );
+
+		// Advance
+		bmew_page ++;
+		bmew_query( $ );
 	} );
 }
