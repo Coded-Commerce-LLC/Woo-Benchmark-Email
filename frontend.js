@@ -13,6 +13,7 @@ jQuery( document ).ready( function( $ ) {
 	} );
 } );
 
+// Delay Typeahead Prototype
 var bmew_input_delay = ( function() {
 	var timer = 0;
 	return function( callback, ms ) {

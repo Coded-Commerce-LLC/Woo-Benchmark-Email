@@ -1,5 +1,8 @@
 <?php
 
+// Exit If Accessed Directly
+if( ! defined( 'ABSPATH' ) ) { exit; }
+
 // Front End Plugin Logic
 class bmew_frontend {
 

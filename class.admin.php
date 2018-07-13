@@ -1,19 +1,28 @@
 <?php
 
+// Exit If Accessed Directly
+if( ! defined( 'ABSPATH' ) ) { exit; }
+
 // Administrative / Settings Class
 class bmew_admin {
 
 	// Admin Dashboard Test Function
 	static function wp_dashboard_setup() {
-		//$response = get_option( 'bmew_lists' );
+
+		/*
+			Diagnostics
+		*/
+		$response = get_option( 'bmew_lists' );
 		//$response = bmew_api::add_list( 'WooCommerce Customers' );
 		//$response = bmew_api::get_lists();
 		//$response = bmew_api::get_contact( 3649970, 211633335 );
 		//$response = bmew_api::add_contact( 3649970, 'sean+test04@codedcommerce.com', 'Tester', 'Testing' );
-		//echo sprintf(
-		//	'<div class="notice notice-info is-dismissible"><p><pre>%s</pre></p></div>',
-		//	print_r( $response, true )
-		//);
+
+		// Output Diagnostics
+		echo sprintf(
+			'<div class="notice notice-info is-dismissible"><p><pre>%s</pre></p></div>',
+			print_r( $response, true )
+		);
 	}
 
 	// Create The Section Beneath The Advanced Tab
@@ -33,13 +42,13 @@ class bmew_admin {
 					<span id="sync_in_progress" style="display:none;">
 						' . sprintf(
 							"<strong>%s</strong> %s",
-							__( 'Please wait.', 'bmew' ),
-							__( 'Syncing at 10 orders per page, completed pages...', 'bmew' )
+							__( 'Please wait.', 'benchmark-email-woo' ),
+							__( 'Syncing at 10 orders per page, completed pages...', 'benchmark-email-woo' )
 						) . '
 					</span>
 					<span id="sync_progress_bar"></span>
 					<span id="sync_complete" style="display:none;">
-						' . __( 'Finished Customer Sync.', 'bmew' ) . '
+						' . __( 'Finished Customer Sync.', 'benchmark-email-woo' ) . '
 					</span>
 				</p>
 			</div>
@@ -50,7 +59,7 @@ class bmew_admin {
 	static function woocommerce_get_settings_advanced( $settings ) {
 
 		// Check The Current Section Is What We Want
-		if( ! isset( $_REQUEST['section'] ) || $_REQUEST['section'] != 'bmew' ) {
+		if( ! isset( $_REQUEST['section'] ) || $_REQUEST['section'] != 'benchmark-email-woo' ) {
 			return $settings;
 		}
 
@@ -62,21 +71,21 @@ class bmew_admin {
 
 			// Add API Key Field
 			array(
-				'desc_tip' => __( 'Log into https://ui.benchmarkemail.com and copy your API key here.', 'bmew' ),
-				'desc' => '<br>' . __( 'API Key from your Benchmark Email account', 'bmew' ),
+				'desc_tip' => __( 'Log into https://ui.benchmarkemail.com and copy your API key here.', 'benchmark-email-woo' ),
+				'desc' => '<br>' . __( 'API Key from your Benchmark Email account', 'benchmark-email-woo' ),
 				'id' => 'bmew_key',
-				'name' => __( 'API Key', 'bmew' ),
+				'name' => __( 'API Key', 'benchmark-email-woo' ),
 				'type' => 'text',
 			),
 
 			// Add Text Field Option
 			array(
-				'default' => __( 'Opt-in to receive exclusive customer communications', 'bmew' ),
-				'desc_tip' => __( 'Label for checkout form opt-in checkbox field.', 'bmew' ) . ' '
-					. __( 'Leave this setting blank to eliminate the opt-in field from your checkout form.', 'bmew' ),
-				'desc' => '<br>' . __( 'Checkout form opt-in field label', 'bmew' ),
+				'default' => __( 'Opt-in to receive exclusive customer communications', 'benchmark-email-woo' ),
+				'desc_tip' => __( 'Label for checkout form opt-in checkbox field.', 'benchmark-email-woo' ) . ' '
+					. __( 'Leave this setting blank to eliminate the opt-in field from your checkout form.', 'benchmark-email-woo' ),
+				'desc' => '<br>' . __( 'Checkout form opt-in field label', 'benchmark-email-woo' ),
 				'id' => 'bmew_checkout_optin_label',
-				'name' => __( 'Checkout Opt-In Field', 'bmew' ),
+				'name' => __( 'Checkout Opt-In Field', 'benchmark-email-woo' ),
 				'type' => 'text',
 			),
 

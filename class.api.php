@@ -1,5 +1,8 @@
 <?php
 
+// Exit If Accessed Directly
+if( ! defined( 'ABSPATH' ) ) { exit; }
+
 // ReST API Class
 class bmew_api {
 
@@ -17,11 +20,11 @@ class bmew_api {
 			'Data' => array(
 				'Email' => $email,
 				'EmailPerm' => 1,
-				'FirstName' => $first,
 				'IPAddress' => bmew_api::get_client_ip(),
-				'LastName' => $last,
 			),
 		);
+		if( $first) { $body['Data']['FirstName'] = $first; }
+		if( $last) { $body['Data']['LastName'] = $last; }
 		$args = array(
 			'body' => json_encode( $body ),
 			'headers' => $headers,
