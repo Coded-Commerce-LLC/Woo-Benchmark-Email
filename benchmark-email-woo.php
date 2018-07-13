@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Benchmark Email WooCommerce
  * Plugin URI: http://woocommerce.com/products/benchmark-email-woocommerce/
- * Description: Benchmark Email WooCommerce
+ * Description: Connects WooCommerce with Benchmark Email for syncing customers and abandoned carts.
  * Version: 1.0.0
  * Author: WooCommerce
  * Author URI: http://woocommerce.com/

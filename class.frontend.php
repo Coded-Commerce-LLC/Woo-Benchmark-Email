@@ -90,8 +90,11 @@ class bmew_frontend {
 		// Exit If No Email Provided
 		if( ! $email ) { return; }
 
+		// Get URL
+		$url = wc_get_cart_url();
+
 		// Add Contact To List
-		bmew_api::add_contact( $listID, $email, $first, $last );
+		bmew_api::add_contact( $listID, $email, $first, $last, $url );
 
 		// Exit
 		echo $email;
@@ -142,8 +145,12 @@ class bmew_frontend {
 		$listID = bmew_frontend::match_list( 'customers' );
 		if( ! $listID ) { return; }
 
+		// Get Order Receipt URL
+		$order = wc_get_order( $order_id );
+		$url = $order->get_view_order_url();
+
 		// Add Contact To List
-		bmew_api::add_contact( $listID, $email, $first, $last );
+		bmew_api::add_contact( $listID, $email, $first, $last, $url );
 	}
 
 	// Helper To Match a Contact List

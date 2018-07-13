@@ -6,7 +6,7 @@ if( ! defined( 'ABSPATH' ) ) { exit; }
 // Administrative / Settings Class
 class bmew_admin {
 
-	// Admin Dashboard Test Function
+	// Admin Dashboard Diagnostics Function
 	static function wp_dashboard_setup() {
 
 		/*
@@ -129,8 +129,11 @@ class bmew_admin {
 			// Exit If No Email Provided
 			if( ! $email ) { continue; }
 
+			// Get URL
+			$url = wc_get_cart_url();
+
 			// Add Contact To List
-			bmew_api::add_contact( $listID, $email, $first, $last );
+			bmew_api::add_contact( $listID, $email, $first, $last, $url );
 		}
 		if( ! $orders ) { $page = 0; }
 

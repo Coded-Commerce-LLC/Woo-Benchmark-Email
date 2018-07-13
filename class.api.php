@@ -10,7 +10,7 @@ class bmew_api {
 	static $url = 'https://clientapi.benchmarkemail.com/';
 
 	// Adds a Contact To a List
-	static function add_contact( $listID, $email, $first, $last ) {
+	static function add_contact( $listID, $email, $first='', $last='', $url='' ) {
 		$key = get_option( 'bmew_key' );
 		$headers = array(
 			'AuthToken' => $key,
@@ -18,6 +18,8 @@ class bmew_api {
 		);
 		$body = array(
 			'Data' => array(
+				'Field19' => current_time( 'm/d/Y' ),
+				'Field21' => $url,
 				'Email' => $email,
 				'EmailPerm' => 1,
 				'IPAddress' => bmew_api::get_client_ip(),
@@ -25,6 +27,9 @@ class bmew_api {
 		);
 		if( $first) { $body['Data']['FirstName'] = $first; }
 		if( $last) { $body['Data']['LastName'] = $last; }
+			//Field22 Product1
+			//Field23 Product2
+			//Field24 Total
 		$args = array(
 			'body' => json_encode( $body ),
 			'headers' => $headers,
