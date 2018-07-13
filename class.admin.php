@@ -85,13 +85,13 @@ class bmew_admin {
 		);
 	}
 
-	// AJAX JavaScript
+	// AJAX Load Script
 	static function admin_enqueue_scripts() {
 		wp_enqueue_script( 'bmew_admin', plugin_dir_url( __FILE__ ) . 'admin.js', array( 'jquery' ), null );
 	}
 
-	// AJAX Submit
-	static function wp_ajax_bmew_action() {
+	// Customer Sync AJAX Submit
+	static function wp_ajax__bmew_action__sync_customers() {
 
 		// Find Appropriate Contact List
 		$listID = bmew_frontend::match_list( 'customers' );
@@ -124,6 +124,8 @@ class bmew_admin {
 			bmew_api::add_contact( $listID, $email, $first, $last );
 		}
 		if( ! $orders ) { $page = 0; }
+
+		// Exit
 		echo $page;
 		wp_die();
 	}

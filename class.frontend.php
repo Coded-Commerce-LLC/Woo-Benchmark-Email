@@ -10,6 +10,13 @@ class bmew_frontend {
 		'customers' => 'WooCommerce Customers',
 	);
 
+	// AJAX Load Script
+	static function wp_enqueue_scripts() {
+		if( ! function_exists( 'is_checkout' ) || ! is_checkout() ) { return; }
+		wp_enqueue_script( 'bmew_frontend', plugin_dir_url( __FILE__ ) . 'frontend.js', array( 'jquery' ), null );
+		wp_localize_script( 'bmew_frontend', 'bmew_ajax_object', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
+	}
+
 	// Initialize Contact Lists
 	static function init_contact_lists() {
 
@@ -41,6 +48,46 @@ class bmew_frontend {
 		if( $updated ) {
 			update_option( 'bmew_lists', $lists );
 		}
+	}
+
+	// AJAX Routing
+	static function wp_ajax__bmew_action() {
+
+		// Verify Action Is Requested
+		if( empty( $_POST['sync'] ) ) { return; }
+
+		// Back End Routing
+		if( $_POST['sync'] == 'sync_customers' ) {
+			bmew_admin::wp_ajax__bmew_action__sync_customers();
+		}
+
+		// Front End Routing
+		else if( $_POST['sync'] == 'abandoned_cart' ) {
+			return bmew_frontend::wp_ajax__bmew_action__abandoned_cart();
+		}
+	}
+
+	// Abandoned Cart Submission
+	static function wp_ajax__bmew_action__abandoned_cart() {
+
+		// Find Appropriate Contact List
+		$listID = bmew_frontend::match_list( 'abandons' );
+		if( ! $listID ) { return; }
+
+		// Get Fields From Order
+		$email = isset( $_POST['email'] ) ? sanitize_email( $_POST['email'] ) : '';
+		$first = isset( $_POST['first'] ) ? sanitize_text_field( $_POST['first'] ) : '';
+		$last = isset( $_POST['last'] ) ? sanitize_text_field( $_POST['last'] ) : '';
+
+		// Exit If No Email Provided
+		if( ! $email ) { return; }
+
+		// Add Contact To List
+		bmew_api::add_contact( $listID, $email, $first, $last );
+
+		// Exit
+		echo $email;
+		wp_die();
 	}
 
 	// Filter WooCommerce Checkout Fields
