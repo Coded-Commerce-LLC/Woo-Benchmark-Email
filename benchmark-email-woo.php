@@ -53,5 +53,5 @@ if(
 	add_action( 'wp_ajax_nopriv_bmew_action', array( 'bmew_frontend', 'wp_ajax__bmew_action' ) );
 
 	// Internationalization
-	
+	//add_action( 'plugins_loaded',  array( 'bmew_frontend', 'plugins_loaded' ) );
 }

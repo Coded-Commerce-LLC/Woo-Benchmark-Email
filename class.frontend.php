@@ -13,6 +13,11 @@ class bmew_frontend {
 		'customers' => 'WooCommerce Customers',
 	);
 
+	// Load Translations
+	static function plugins_loaded() {
+		load_plugin_textdomain( 'benchmark-email-woo', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+	}
+
 	// AJAX Load Script
 	static function wp_enqueue_scripts() {
 		if( ! function_exists( 'is_checkout' ) || ! is_checkout() ) { return; }

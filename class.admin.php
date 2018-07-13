@@ -59,7 +59,7 @@ class bmew_admin {
 	static function woocommerce_get_settings_advanced( $settings ) {
 
 		// Check The Current Section Is What We Want
-		if( ! isset( $_REQUEST['section'] ) || $_REQUEST['section'] != 'benchmark-email-woo' ) {
+		if( ! isset( $_REQUEST['section'] ) || $_REQUEST['section'] != 'bmew' ) {
 			return $settings;
 		}
 
