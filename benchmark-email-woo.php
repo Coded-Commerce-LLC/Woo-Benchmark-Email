@@ -46,12 +46,12 @@ if(
 	add_filter( 'woocommerce_get_settings_advanced', array( 'bmew_admin', 'woocommerce_get_settings_advanced' ) );
 
 	// Diagnostics Hook
-	//add_action( 'wp_dashboard_setup', array( 'bmew_admin', 'wp_dashboard_setup' ) );
+	add_action( 'wp_dashboard_setup', array( 'bmew_admin', 'wp_dashboard_setup' ) );
 
 	// AJAX Hooks
 	add_action( 'wp_ajax_bmew_action', array( 'bmew_frontend', 'wp_ajax__bmew_action' ) );
 	add_action( 'wp_ajax_nopriv_bmew_action', array( 'bmew_frontend', 'wp_ajax__bmew_action' ) );
 
 	// Internationalization
-	//add_action( 'plugins_loaded',  array( 'bmew_frontend', 'plugins_loaded' ) );
+	add_action( 'plugins_loaded',  array( 'bmew_frontend', 'plugins_loaded' ) );
 }

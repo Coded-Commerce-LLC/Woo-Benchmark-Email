@@ -141,6 +141,10 @@ class bmew_frontend {
 		// Exit If No Email Provided
 		if( ! $email ) { return; }
 
+		// Remove From Abandons List
+		$listID = bmew_frontend::match_list( 'abandons' );
+		bmew_api::delete_contact_by_email( 'abandons', $listID, $email );
+
 		// Find Appropriate Contact List
 		$listID = bmew_frontend::match_list( 'customers' );
 		if( ! $listID ) { return; }
