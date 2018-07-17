@@ -71,6 +71,16 @@ class bmew_admin {
 			// Add Section Title
 			array( 'desc' => '', 'id' => 'bmew', 'name' => 'Benchmark Email', 'type' => 'title' ),
 
+
+			// Add API Key Field
+			array(
+				'desc_tip' => '',
+				'desc' => '<br>' . __( 'Moves the email address and phone number fields underneath the name fields.', 'benchmark-email-woo' ),
+				'id' => 'bmew_checkout_reorder',
+				'name' => __( 'Move email field higher on checkout', 'benchmark-email-woo' ),
+				'type' => 'checkbox',
+			),
+
 			// Add API Key Field
 			array(
 				'desc_tip' => __( 'Log into https://ui.benchmarkemail.com and copy your API key here.', 'benchmark-email-woo' ),

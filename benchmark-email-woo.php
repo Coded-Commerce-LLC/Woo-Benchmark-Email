@@ -34,24 +34,25 @@ if(
 	require_once( 'class.frontend.php' );
 
 	// Front End Hooks
-	add_action( 'init', array( 'bmew_frontend', 'init_contact_lists' ) );
-	add_action( 'woocommerce_checkout_update_order_meta', array( 'bmew_frontend', 'woocommerce_checkout_update_order_meta' ) );
-	add_filter( 'woocommerce_checkout_fields' , array( 'bmew_frontend', 'woocommerce_checkout_fields' ) );
-	add_action( 'wp_enqueue_scripts', array( 'bmew_frontend', 'wp_enqueue_scripts' ) );
+	add_action( 'init', [ 'bmew_frontend', 'init_contact_lists' ] );
+	add_action( 'woocommerce_checkout_update_order_meta', [ 'bmew_frontend', 'woocommerce_checkout_update_order_meta' ] );
+	add_filter( 'woocommerce_checkout_fields' , [ 'bmew_frontend', 'woocommerce_checkout_fields' ] );
+	add_action( 'wp_enqueue_scripts', [ 'bmew_frontend', 'wp_enqueue_scripts' ] );
+	add_filter( 'woocommerce_billing_fields', [ 'bmew_frontend', 'woocommerce_billing_fields' ] );
 
 	// Admin Hooks
-	add_action( 'admin_enqueue_scripts', array( 'bmew_admin', 'admin_enqueue_scripts' ) );
-	add_action( 'woocommerce_settings_bmew', array( 'bmew_admin', 'woocommerce_settings_bmew' ) );
-	add_filter( 'woocommerce_get_sections_advanced', array( 'bmew_admin', 'woocommerce_get_sections_advanced' ) );
-	add_filter( 'woocommerce_get_settings_advanced', array( 'bmew_admin', 'woocommerce_get_settings_advanced' ) );
+	add_action( 'admin_enqueue_scripts', [ 'bmew_admin', 'admin_enqueue_scripts' ] );
+	add_action( 'woocommerce_settings_bmew', [ 'bmew_admin', 'woocommerce_settings_bmew' ] );
+	add_filter( 'woocommerce_get_sections_advanced', [ 'bmew_admin', 'woocommerce_get_sections_advanced' ] );
+	add_filter( 'woocommerce_get_settings_advanced', [ 'bmew_admin', 'woocommerce_get_settings_advanced' ] );
 
 	// Diagnostics Hook
-	//add_action( 'wp_dashboard_setup', array( 'bmew_admin', 'wp_dashboard_setup' ) );
+	//add_action( 'wp_dashboard_setup', [ 'bmew_admin', 'wp_dashboard_setup' ] );
 
 	// AJAX Hooks
-	add_action( 'wp_ajax_bmew_action', array( 'bmew_frontend', 'wp_ajax__bmew_action' ) );
-	add_action( 'wp_ajax_nopriv_bmew_action', array( 'bmew_frontend', 'wp_ajax__bmew_action' ) );
+	add_action( 'wp_ajax_bmew_action', [ 'bmew_frontend', 'wp_ajax__bmew_action' ] );
+	add_action( 'wp_ajax_nopriv_bmew_action', [ 'bmew_frontend', 'wp_ajax__bmew_action' ] );
 
 	// Internationalization
-	add_action( 'plugins_loaded',  array( 'bmew_frontend', 'plugins_loaded' ) );
+	add_action( 'plugins_loaded',  [ 'bmew_frontend', 'plugins_loaded' ] );
 }

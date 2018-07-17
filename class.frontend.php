@@ -58,6 +58,15 @@ class bmew_frontend {
 		}
 	}
 
+	// Reorder checkout contact fields
+	static function woocommerce_billing_fields( $fields ) {
+		$bmew_checkout_reorder = get_option( 'bmew_checkout_reorder' );
+		if( ! $bmew_checkout_reorder ) { return $fields; }
+		$fields['billing_email']['priority'] = 21;	
+		$fields['billing_phone']['priority'] = 22;	
+		return $fields;
+	}
+
 	// AJAX Routing
 	static function wp_ajax__bmew_action() {
 
