@@ -36,9 +36,10 @@ if(
 	// Front End Hooks
 	add_action( 'init', [ 'bmew_frontend', 'init_contact_lists' ] );
 	add_action( 'woocommerce_checkout_update_order_meta', [ 'bmew_frontend', 'woocommerce_checkout_update_order_meta' ] );
-	add_filter( 'woocommerce_checkout_fields' , [ 'bmew_frontend', 'woocommerce_checkout_fields' ] );
 	add_action( 'wp_enqueue_scripts', [ 'bmew_frontend', 'wp_enqueue_scripts' ] );
+	add_filter( 'woocommerce_add_to_cart_redirect', [ 'bmew_frontend', 'woocommerce_add_to_cart_redirect' ] );
 	add_filter( 'woocommerce_billing_fields', [ 'bmew_frontend', 'woocommerce_billing_fields' ] );
+	add_filter( 'woocommerce_checkout_fields' , [ 'bmew_frontend', 'woocommerce_checkout_fields' ] );
 
 	// Admin Hooks
 	add_action( 'admin_enqueue_scripts', [ 'bmew_admin', 'admin_enqueue_scripts' ] );

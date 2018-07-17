@@ -58,12 +58,20 @@ class bmew_frontend {
 		}
 	}
 
+	// Add To Cart Redirects To Checkout
+	static function woocommerce_add_to_cart_redirect( $wc_cart_url ) {
+		global $woocommerce;
+		$bmew_skip_cart = get_option( 'bmew_skip_cart' );
+		if( ! $bmew_skip_cart ) { return $wc_cart_url; }
+		return wc_get_checkout_url();
+	}
+
 	// Reorder checkout contact fields
 	static function woocommerce_billing_fields( $fields ) {
 		$bmew_checkout_reorder = get_option( 'bmew_checkout_reorder' );
 		if( ! $bmew_checkout_reorder ) { return $fields; }
-		$fields['billing_email']['priority'] = 21;	
-		$fields['billing_phone']['priority'] = 22;	
+		$fields['billing_email']['priority'] = 21;
+		$fields['billing_phone']['priority'] = 29;
 		return $fields;
 	}
 
@@ -119,12 +127,16 @@ class bmew_frontend {
 		// If Opt-In Unset, Skip It
 		if( ! $bmew_checkout_optin_label ) { return $fields; }
 
+		// Determine Field Display Priority
+		$bmew_checkout_reorder = get_option( 'bmew_checkout_reorder' );
+		$priority = $bmew_checkout_reorder ? 22 : 122;
+
 		// Add Opt-In Form Field
 		$fields['billing']['bmew_subscribe'] = array(
 			'class' => array( 'form-row-wide' ),
 			'default' => true,
 			'label' => $bmew_checkout_optin_label,
-			'priority' => 120,
+			'priority' => $priority,
 			'required' => false,
 			'type' => 'checkbox',
     	);

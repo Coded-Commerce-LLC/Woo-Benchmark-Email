@@ -71,23 +71,23 @@ class bmew_admin {
 			// Add Section Title
 			array( 'desc' => '', 'id' => 'bmew', 'name' => 'Benchmark Email', 'type' => 'title' ),
 
-
 			// Add API Key Field
 			array(
-				'desc_tip' => '',
-				'desc' => '<br>' . __( 'Moves the email address and phone number fields underneath the name fields.', 'benchmark-email-woo' ),
-				'id' => 'bmew_checkout_reorder',
-				'name' => __( 'Move email field higher on checkout', 'benchmark-email-woo' ),
+				'desc_tip' => __( 'This may improve the chances of the email address being provided by customers and thus available to abandoned cart offers.', 'benchmark-email-woo' ),
+				'desc' => '<br>' . __( 'Skips the cart step and redirects customers to the checkout form that conveniently displays a mini cart.', 'benchmark-email-woo' )
+					. '<br>' . __( "If they need to edit their cart, they will have to click on your theme's cart link in order to do so.", 'benchmark-email-woo' ),
+				'id' => 'bmew_skip_cart',
+				'name' => __( 'Skip the cart step', 'benchmark-email-woo' ),
 				'type' => 'checkbox',
 			),
 
 			// Add API Key Field
 			array(
-				'desc_tip' => __( 'Log into https://ui.benchmarkemail.com and copy your API key here.', 'benchmark-email-woo' ),
-				'desc' => '<br>' . __( 'API Key from your Benchmark Email account', 'benchmark-email-woo' ),
-				'id' => 'bmew_key',
-				'name' => __( 'API Key', 'benchmark-email-woo' ),
-				'type' => 'text',
+				'desc_tip' => __( 'This may improve the chances of the email address being provided by customers and thus available to abandoned cart offers.', 'benchmark-email-woo' ),
+				'desc' => '<br>' . __( 'Moves the email address and phone number fields up and underneath the name fields.', 'benchmark-email-woo' ),
+				'id' => 'bmew_checkout_reorder',
+				'name' => __( 'Move email field up', 'benchmark-email-woo' ),
+				'type' => 'checkbox',
 			),
 
 			// Add Text Field Option
@@ -98,6 +98,15 @@ class bmew_admin {
 				'desc' => '<br>' . __( 'Checkout form opt-in field label', 'benchmark-email-woo' ),
 				'id' => 'bmew_checkout_optin_label',
 				'name' => __( 'Checkout Opt-In Field', 'benchmark-email-woo' ),
+				'type' => 'text',
+			),
+
+			// Add API Key Field
+			array(
+				'desc_tip' => __( 'Log into https://ui.benchmarkemail.com and copy your API key here.', 'benchmark-email-woo' ),
+				'desc' => '<br>' . __( 'API Key from your Benchmark Email account', 'benchmark-email-woo' ),
+				'id' => 'bmew_key',
+				'name' => __( 'API Key', 'benchmark-email-woo' ),
 				'type' => 'text',
 			),
 
