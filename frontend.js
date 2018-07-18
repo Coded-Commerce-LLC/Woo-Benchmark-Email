@@ -33,8 +33,8 @@ function bmew_billing_email_checker( $ ) {
 			'action': 'bmew_action',
 			'sync': 'abandoned_cart',
 			'email': $( '#billing_email' ).val(),
-			'first': $( '#billing_first_name' ).val(),
-			'last': $( '#billing_last_name' ).val()
+			'billing_first_name': $( '#billing_first_name' ).val(),
+			'billing_last_name': $( '#billing_last_name' ).val()
 		};
 		$.post( bmew_ajax_object.ajax_url, data, function( response ) {
 			alert( 'Abandoned cart for ' + response );

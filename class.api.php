@@ -10,7 +10,8 @@ class bmew_api {
 	static $url = 'https://clientapi.benchmarkemail.com/';
 
 	// Adds a Contact To a List
-	static function add_contact( $listID, $email, $first='', $last='', $url='' ) {
+	static function add_contact( $listID, $email, $args = array() ) {
+		extract( $args );
 		$key = get_option( 'bmew_key' );
 		$headers = array(
 			'AuthToken' => $key,
@@ -19,17 +20,17 @@ class bmew_api {
 		$body = array(
 			'Data' => array(
 				'Field19' => current_time( 'm/d/Y' ),
-				'Field21' => $url,
+				'Field21' => isset( $url ) ? $url : '',
 				'Email' => $email,
 				'EmailPerm' => 1,
 				'IPAddress' => bmew_api::get_client_ip(),
 			),
 		);
-		if( $first) { $body['Data']['FirstName'] = $first; }
-		if( $last) { $body['Data']['LastName'] = $last; }
-			//Field22 Product1
-			//Field23 Product2
-			//Field24 Total
+		if( isset( $first ) ) { $body['Data']['FirstName'] = $first; }
+		if( isset( $last ) ) { $body['Data']['LastName'] = $last; }
+		if( isset( $product1 ) ) { $body['Data']['Field22'] = $product1; }
+		if( isset( $product2 ) ) { $body['Data']['Field23'] = $product2; }
+		if( isset( $total ) ) { $body['Data']['Field24'] = $total; }
 		$args = array(
 			'body' => json_encode( $body ),
 			'headers' => $headers,

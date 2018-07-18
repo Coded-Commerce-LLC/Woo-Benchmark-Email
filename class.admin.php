@@ -16,7 +16,7 @@ class bmew_admin {
 		//$response = bmew_api::add_list( 'WooCommerce Customers' );
 		//$response = bmew_api::get_lists();
 		//$response = bmew_api::get_contact( 3649970, 211633335 );
-		//$response = bmew_api::add_contact( 3649970, 'sean+test04@codedcommerce.com', 'Tester', 'Testing' );
+		//$response = bmew_api::add_contact( 3649970, 'sean+test04@codedcommerce.com' );
 		//$response = bmew_api::find_contact( 'sean@codedcommerce.com' );
 		//$response = bmew_api::delete_contact( 15769932, 212051958 );
 
@@ -130,7 +130,6 @@ class bmew_admin {
 		// Query Orders
 		$page = empty( $_POST['page'] ) ? 1 : intval( $_POST['page'] );
 		$args = array(
-			//'_bmew_syncd' => current_time( 'timestamp' ) - 86400,
 			'limit' => 10,
 			'meta_compare' => 'NOT EXISTS',
 			'meta_key' => '_bmew_syncd',
@@ -147,8 +146,6 @@ class bmew_admin {
 
 			// Get Fields From Order
 			$email = get_post_meta( $post_id, '_billing_email', true );
-			$first = get_post_meta( $post_id, '_billing_first_name', true );
-			$last = get_post_meta( $post_id, '_billing_last_name', true );
 
 			// Exit If No Email Provided
 			if( ! $email ) { continue; }
@@ -156,11 +153,13 @@ class bmew_admin {
 			// Mark Order As Sync'd
 			update_post_meta( $post_id, '_bmew_syncd', current_time( 'timestamp' ) );
 
-			// Get URL
-			$url = wc_get_cart_url();
-
 			// Add Contact To List
-			bmew_api::add_contact( $listID, $email, $first, $last, $url );
+			$args = array(
+				'first' => get_post_meta( $post_id, '_billing_first_name', true ),
+				'last' => get_post_meta( $post_id, '_billing_last_name', true ),
+				'url' => wc_get_cart_url(),
+			);
+			bmew_api::add_contact( $listID, $email, $args );
 		}
 		if( ! $orders ) { $page = 0; }
 

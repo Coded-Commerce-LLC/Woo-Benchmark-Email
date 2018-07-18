@@ -94,6 +94,7 @@ class bmew_frontend {
 
 	// Abandoned Cart Submission
 	static function wp_ajax__bmew_action__abandoned_cart() {
+		global $woocommerce;
 
 		// Find Appropriate Contact List
 		$listID = bmew_frontend::match_list( 'abandons' );
@@ -101,21 +102,41 @@ class bmew_frontend {
 
 		// Get Fields From Order
 		$email = isset( $_POST['email'] ) ? sanitize_email( $_POST['email'] ) : '';
-		$first = isset( $_POST['first'] ) ? sanitize_text_field( $_POST['first'] ) : '';
-		$last = isset( $_POST['last'] ) ? sanitize_text_field( $_POST['last'] ) : '';
 
 		// Exit If No Email Provided
 		if( ! $email ) { return; }
 
-		// Get URL
-		$url = wc_get_cart_url();
+		// Get Cart Items
+		$products = bmew_frontend::get_products();
 
 		// Add Contact To List
-		bmew_api::add_contact( $listID, $email, $first, $last, $url );
+		$args = array(
+			'first' => isset( $_POST['billing_first_name'] ) ? sanitize_text_field( $_POST['billing_first_name'] ) : '',
+			'last' => isset( $_POST['billing_last_name'] ) ? sanitize_text_field( $_POST['billing_last_name'] ) : '',
+			'product1' => isset( $products[0] ) ? $products[0] : '',
+			'product2' => isset( $products[1] ) ? $products[1] : '',
+			'total' => get_woocommerce_currency_symbol() . $woocommerce->cart->total,
+			'url' => wc_get_cart_url(),
+		);
+		bmew_api::add_contact( $listID, $email, $args );
 
 		// Exit
 		echo $email;
 		wp_die();
+	}
+
+	// Get Cart Details
+	static function get_products() {
+		global $woocommerce;
+		$products = array();
+		foreach( $woocommerce->cart->get_cart() as $item ) {
+			$_product = wc_get_product( $item['product_id'] );
+			$products[] = $_product->get_title()
+				. ', quantity ' . $item['quantity']
+				. ', price ' . get_woocommerce_currency_symbol()
+				. get_post_meta( $item['product_id'] , '_price', true );
+		}
+		return $products;
 	}
 
 	// Filter WooCommerce Checkout Fields
@@ -156,8 +177,6 @@ class bmew_frontend {
 
 		// Get Fields
 		$email = isset( $_POST['billing_email'] ) ? $_POST['billing_email'] : '';
-		$first = isset( $_POST['billing_first_name'] ) ? $_POST['billing_first_name'] : '';
-		$last = isset( $_POST['billing_last_name'] ) ? $_POST['billing_last_name'] : '';
 
 		// Exit If No Email Provided
 		if( ! $email ) { return; }
@@ -170,12 +189,22 @@ class bmew_frontend {
 		$listID = bmew_frontend::match_list( 'customers' );
 		if( ! $listID ) { return; }
 
-		// Get Order Receipt URL
-		$order = wc_get_order( $order_id );
-		$url = $order->get_view_order_url();
+		// Get Cart Items
+		$products = bmew_frontend::get_products();
+
+		// Get Order Record
+		$_order = wc_get_order( $order_id );
 
 		// Add Contact To List
-		bmew_api::add_contact( $listID, $email, $first, $last, $url );
+		$args = array(
+			'first' => isset( $_POST['billing_first_name'] ) ? sanitize_text_field( $_POST['billing_first_name'] ) : '',
+			'last' => isset( $_POST['billing_last_name'] ) ? sanitize_text_field( $_POST['billing_last_name'] ) : '',
+			'product1' => isset( $products[0] ) ? $products[0] : '',
+			'product2' => isset( $products[1] ) ? $products[1] : '',
+			'total' => get_woocommerce_currency_symbol() . $_order->get_total(),
+			'url' => $_order->get_view_order_url(),
+		);
+		bmew_api::add_contact( $listID, $email, $args );
 	}
 
 	// Helper To Match a Contact List
