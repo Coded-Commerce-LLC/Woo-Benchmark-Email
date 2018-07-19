@@ -12,15 +12,9 @@ class bmew_api {
 	// Adds a Contact To a List
 	static function add_contact( $listID, $email, $args = array() ) {
 		extract( $args );
-		$key = get_option( 'bmew_key' );
-		$headers = array(
-			'AuthToken' => $key,
-			'Content-Type' => 'application/json',
-		);
 		$body = array(
 			'Data' => array(
 				'Field19' => current_time( 'm/d/Y' ),
-				'Field21' => isset( $url ) ? $url : '',
 				'Email' => $email,
 				'EmailPerm' => 1,
 				'IPAddress' => bmew_api::get_client_ip(),
@@ -31,63 +25,21 @@ class bmew_api {
 		if( isset( $product1 ) ) { $body['Data']['Field22'] = $product1; }
 		if( isset( $product2 ) ) { $body['Data']['Field23'] = $product2; }
 		if( isset( $total ) ) { $body['Data']['Field24'] = $total; }
-		$args = array(
-			'body' => json_encode( $body ),
-			'headers' => $headers,
-			'method' => 'POST',
-		);
-		$url = bmew_api::$url . 'Contact/' . $listID . '/ContactDetails';
-		$response = wp_remote_request( $url, $args );
-		if( is_wp_error( $response ) ) { return; }
-		$response = wp_remote_retrieve_body( $response );
-		$response = json_decode( $response );
-		return $response;
+		if( isset( $url ) ) { $body['Data']['Field21'] = $url; }
+		$uri = 'Contact/' . $listID . '/ContactDetails';
+		$response = bmew_api::benchmark_query( $uri, 'POST', $body );
+		return isset( $response->ID ) ? intval( $response->ID ) : $response;
 	}
 
 	// Find Contact ID On a List
 	static function find_contact( $email ) {
-		$key = get_option( 'bmew_key' );
-		$headers = array(
-			'AuthToken' => $key,
-			'Content-Type' => 'application/json',
-		);
-		$args = array(
-			'body' => null,
-			'headers' => $headers,
-			'method' => 'GET',
-		);
-		$url = bmew_api::$url . 'Contact/ContactDetails?Search=' . $email;
-		$response = wp_remote_request( $url, $args );
-		if( is_wp_error( $response ) ) { return; }
-		$response = wp_remote_retrieve_body( $response );
-		$response = json_decode( $response );
-		return $response;
+		return bmew_api::benchmark_query( 'Contact/ContactDetails?Search=' . $email );
 	}
 
 	// Deletes a Contact
 	static function delete_contact( $listID, $contactID ) {
-		$key = get_option( 'bmew_key' );
-		$headers = array(
-			'AuthToken' => $key,
-			'Content-Type' => 'application/json',
-		);
-		$body = array(
-			'ContactID' => $contactID,
-			'ListID' => $listID,
-		);
-		$args = array(
-			'body' => json_encode( $body ),
-			'headers' => $headers,
-			'method' => 'DELETE',
-		);
-
-		$url = bmew_api::$url . 'Contact/ContactDetails';
-		$response = wp_remote_request( $url, $args );
-		if( is_wp_error( $response ) ) { return; }
-		$response = wp_remote_retrieve_body( $response );
-		$response = json_decode( $response );
-		return $response;
-
+		$body = array( 'ContactID' => $contactID, 'ListID' => $listID );
+		return bmew_api::benchmark_query( 'Contact/ContactDetails', 'DELETE', $body );
 	}
 
 	// Find a Contact By Email, Then Delete
@@ -104,57 +56,18 @@ class bmew_api {
 
 	// Adds a Contact List
 	static function add_list( $name ) {
-		$key = get_option( 'bmew_key' );
-		$headers = array(
-			'AuthToken' => $key,
-			'Content-Type' => 'application/json',
-		);
-		$body = array(
-			'Data' => array(
-				'Description' => $name,
-				'Name' => $name,
-			),
-		);
-		$args = array(
-			'body' => json_encode( $body ),
-			'headers' => $headers,
-			'method' => 'POST',
-		);
-		$url = bmew_api::$url . 'Contact';
-		$response = wp_remote_request( $url, $args );
-		if( is_wp_error( $response ) ) { return; }
-		$response = wp_remote_retrieve_body( $response );
-		$response = json_decode( $response );
-		if( ! empty( $response->Response->Data->ID ) ) {
-			return intval( $response->Response->Data->ID );
-		}
+		$body = array( 'Data' => array( 'Description' => $name, 'Name' => $name ) );
+		$response = bmew_api::benchmark_query( 'Contact', 'POST', $body );
+		return empty( $response->ID ) ? $response : intval( $response->ID );
 	}
 
 	// Get Contact From a List
 	static function get_contact( $listID, $contactID ) {
-		$key = get_option( 'bmew_key' );
-		$headers = array(
-			'AuthToken' => $key,
-			'Content-Type' => 'application/json',
-		);
-		$args = array(
-			'body' => null,
-			'headers' => $headers,
-			'method' => 'GET',
-		);
-		$url = bmew_api::$url . 'Contact/' . $listID . '/ContactDetails/' . $contactID;
-		$response = wp_remote_request( $url, $args );
-		if( is_wp_error( $response ) ) { return; }
-		$response = wp_remote_retrieve_body( $response );
-		$response = json_decode( $response );
-		if( isset( $response->Response->Data ) ) {
-			$response = $response->Response->Data;
-		}
-		return $response;
+		return bmew_api::benchmark_query( 'Contact/' . $listID . '/ContactDetails/' . $contactID );
 	}
 
 	// Gets Client IP Address
-	function get_client_ip() {
+	static function get_client_ip() {
 		if( isset( $_SERVER[ 'HTTP_CLIENT_IP' ] ) )
 			return $_SERVER[ 'HTTP_CLIENT_IP' ];
 		if( isset( $_SERVER[ 'HTTP_X_FORWARDED_FOR' ] ) )
@@ -171,19 +84,18 @@ class bmew_api {
 
 	// Get All Contact Lists
 	static function get_lists() {
+		return bmew_api::benchmark_query( 'Contact' );
+	}
+
+	// Talk To Benchmark ReST API
+	static function benchmark_query( $uri = '', $method = 'GET', $body = null ) {
+		if( $body ) { $body = json_encode( $body ); }
 		$key = get_option( 'bmew_key' );
-		$headers = array(
-			'AuthToken' => $key,
-			'Content-Type' => 'application/json',
-		);
-		$args = array(
-			'body' => null,
-			'headers' => $headers,
-			'method' => 'GET',
-		);
-		$url = bmew_api::$url . 'Contact/';
+		$headers = array( 'AuthToken' => $key, 'Content-Type' => 'application/json' );
+		$args = array( 'body' => $body, 'headers' => $headers, 'method' => $method );
+		$url = bmew_api::$url . $uri;
 		$response = wp_remote_request( $url, $args );
-		if( is_wp_error( $response ) ) { return; }
+		if( is_wp_error( $response ) ) { return $response; }
 		$response = wp_remote_retrieve_body( $response );
 		$response = json_decode( $response );
 		if( isset( $response->Response->Data ) ) {

@@ -13,12 +13,13 @@ class bmew_admin {
 			Diagnostics
 		*/
 		$response = get_option( 'bmew_lists' );
-		//$response = bmew_api::add_list( 'WooCommerce Customers' );
+		//$response = bmew_api::add_list( 'WooCommerce Test List' );
 		//$response = bmew_api::get_lists();
+		//$response = bmew_frontend::match_list( 'abandons' );
 		//$response = bmew_api::get_contact( 3649970, 211633335 );
-		//$response = bmew_api::add_contact( 3649970, 'sean+test04@codedcommerce.com' );
+		//$response = bmew_api::add_contact( 15769932, 'sean+test04@codedcommerce.com' );
 		//$response = bmew_api::find_contact( 'sean@codedcommerce.com' );
-		//$response = bmew_api::delete_contact( 15769932, 212051958 );
+		//$response = bmew_api::delete_contact( 3649970, 211633335 );
 
 		// Output Diagnostics
 		echo sprintf(
@@ -124,7 +125,8 @@ class bmew_admin {
 	static function wp_ajax__bmew_action__sync_customers() {
 
 		// Find Appropriate Contact List
-		$listID = bmew_frontend::match_list( 'customers' );
+		$lists = get_option( 'bmew_lists' );
+		$listID = $lists['customers'];
 		if( ! $listID ) { return; }
 
 		// Query Orders

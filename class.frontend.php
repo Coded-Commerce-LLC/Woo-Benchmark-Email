@@ -7,7 +7,6 @@ if( ! defined( 'ABSPATH' ) ) { exit; }
 class bmew_frontend {
 
 	// Class Properties
-	static $all_lists = array();
 	static $list_names = array(
 		'abandons' => 'WooCommerce Abandoned Carts',
 		'customers' => 'WooCommerce Customers',
@@ -97,7 +96,8 @@ class bmew_frontend {
 		global $woocommerce;
 
 		// Find Appropriate Contact List
-		$listID = bmew_frontend::match_list( 'abandons' );
+		$lists = get_option( 'bmew_lists' );
+		$listID = $lists['abandons'];
 		if( ! $listID ) { return; }
 
 		// Get Fields From Order
@@ -118,10 +118,9 @@ class bmew_frontend {
 			'total' => get_woocommerce_currency_symbol() . $woocommerce->cart->total,
 			'url' => wc_get_cart_url(),
 		);
-		bmew_api::add_contact( $listID, $email, $args );
+		print_r( bmew_api::add_contact( $listID, $email, $args ) );
 
 		// Exit
-		echo $email;
 		wp_die();
 	}
 
@@ -182,11 +181,13 @@ class bmew_frontend {
 		if( ! $email ) { return; }
 
 		// Remove From Abandons List
-		$listID = bmew_frontend::match_list( 'abandons' );
+		$lists = get_option( 'bmew_lists' );
+		$listID = $lists['abandons'];
 		bmew_api::delete_contact_by_email( 'abandons', $listID, $email );
 
 		// Find Appropriate Contact List
-		$listID = bmew_frontend::match_list( 'customers' );
+		$lists = get_option( 'bmew_lists' );
+		$listID = $lists['customers'];
 		if( ! $listID ) { return; }
 
 		// Get Cart Items
@@ -211,12 +212,10 @@ class bmew_frontend {
 	static function match_list( $list_slug ) {
 
 		// Load Lists, If Not Already Loaded
-		if( ! bmew_frontend::$all_lists ) {
-			bmew_frontend::$all_lists = bmew_api::get_lists();
-		}
+		$lists = bmew_api::get_lists();
 
 		// Loop Contact Lists
-		foreach( bmew_frontend::$all_lists as $list ) {
+		foreach( $lists as $list ) {
 
 			// Skip Bad Result
 			if( empty( $list->ID ) || empty( $list->Name ) ) { continue; }
