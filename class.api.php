@@ -12,6 +12,8 @@ class bmew_api {
 	// Adds a Contact To a List
 	static function add_contact( $listID, $email, $args = array() ) {
 		extract( $args );
+
+		// Build Body
 		$body = array(
 			'Data' => array(
 				'Field19' => current_time( 'm/d/Y' ),
@@ -26,8 +28,24 @@ class bmew_api {
 		if( isset( $product2 ) ) { $body['Data']['Field23'] = $product2; }
 		if( isset( $total ) ) { $body['Data']['Field24'] = $total; }
 		if( isset( $url ) ) { $body['Data']['Field21'] = $url; }
+
+		// Search Existing Records
+		$matches = bmew_api::find_contact( $email );
+		foreach( $matches as $match ) {
+
+			// Found Match, Update Record
+			if( $match->ContactMasterID == $listID ) {
+				$uri = 'Contact/' . $listID . '/ContactDetails/' . $match->ID;
+				$response = bmew_api::benchmark_query( $uri, 'PATCH', $body );
+				return isset( $response->ID ) ? intval( $response->ID ) : $response;
+			}
+		}
+
+		// Add Record
 		$uri = 'Contact/' . $listID . '/ContactDetails';
 		$response = bmew_api::benchmark_query( $uri, 'POST', $body );
+
+		// Response
 		return isset( $response->ID ) ? intval( $response->ID ) : $response;
 	}
 

@@ -17,7 +17,7 @@ class bmew_admin {
 		//$response = bmew_api::get_lists();
 		//$response = bmew_frontend::match_list( 'abandons' );
 		//$response = bmew_api::get_contact( 3649970, 211633335 );
-		//$response = bmew_api::add_contact( 15769932, 'sean+test04@codedcommerce.com' );
+		//$response = bmew_api::add_contact( 15769932, 'sean+test04@codedcommerce.com', [ 'first' => 'Test' ] );
 		//$response = bmew_api::find_contact( 'sean@codedcommerce.com' );
 		//$response = bmew_api::delete_contact( 3649970, 211633335 );
 
