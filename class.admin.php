@@ -17,7 +17,7 @@ class bmew_admin {
 		//$response = bmew_api::get_lists();
 		//$response = bmew_frontend::match_list( 'abandons' );
 		//$response = bmew_api::get_contact( 3649970, 211633335 );
-		//$response = bmew_api::add_contact( 15769932, 'sean+test04@codedcommerce.com', [ 'first' => 'Test' ] );
+		//$response = bmew_api::add_contact( 15769932, 'sean@codedcommerce.com', [ 'first' => 'Test' ] );
 		//$response = bmew_api::find_contact( 'sean@codedcommerce.com' );
 		//$response = bmew_api::delete_contact( 3649970, 211633335 );
 
@@ -109,6 +109,15 @@ class bmew_admin {
 				'id' => 'bmew_key',
 				'name' => __( 'API Key', 'benchmark-email-woo' ),
 				'type' => 'text',
+			),
+
+			// Add API Key Field
+			array(
+				'desc_tip' => __( "For a nicer logs UI, set `define( 'WC_LOG_HANDLER', 'WC_Log_Handler_DB' );` inside your  `wp-config.php`.", 'benchmark-email-woo' ),
+				'desc' => '<br>' . __( 'For temporary use, saves all API communications into WooCommerce > Status > Logs.', 'benchmark-email-woo' ),
+				'id' => 'bmew_debug',
+				'name' => __( 'Log debug messages?', 'benchmark-email-woo' ),
+				'type' => 'checkbox',
 			),
 
 			// End Section

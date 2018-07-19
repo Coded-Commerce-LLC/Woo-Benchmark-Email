@@ -51,6 +51,7 @@ class bmew_api {
 
 	// Find Contact ID On a List
 	static function find_contact( $email ) {
+		$email = str_replace( '+', '%2B', $email );
 		return bmew_api::benchmark_query( 'Contact/ContactDetails?Search=' . $email );
 	}
 
@@ -107,19 +108,38 @@ class bmew_api {
 
 	// Talk To Benchmark ReST API
 	static function benchmark_query( $uri = '', $method = 'GET', $body = null ) {
+
+		// Organize Request
 		if( $body ) { $body = json_encode( $body ); }
 		$key = get_option( 'bmew_key' );
 		$headers = array( 'AuthToken' => $key, 'Content-Type' => 'application/json' );
 		$args = array( 'body' => $body, 'headers' => $headers, 'method' => $method );
 		$url = bmew_api::$url . $uri;
+
+		// Perform And Log Transmission
 		$response = wp_remote_request( $url, $args );
+		bmew_api::logger( $url, $args, $response );
+
+		// Process Response
 		if( is_wp_error( $response ) ) { return $response; }
 		$response = wp_remote_retrieve_body( $response );
 		$response = json_decode( $response );
-		if( isset( $response->Response->Data ) ) {
-			$response = $response->Response->Data;
-		}
-		return $response;
+
+		// Return
+		return isset( $response->Response->Data ) ? $response->Response->Data : $response;
+	}
+
+	// Log Communications
+	static function logger( $url, $request, $response ) {
+		$bmew_debug = get_option( 'bmew_debug' );
+		if( ! $bmew_debug ) { return; }
+		$logger = wc_get_logger();
+		$context = array( 'source' => 'benchmark-email-woo' );
+		$request = print_r( $request, true );
+		$response = print_r( $response, true );
+		$logger->info( "==URL== " . $url, $context );
+		$logger->debug( "==REQUEST== " . $request, $context );
+		$logger->debug( "==RESPONSE== " . $response, $context );
 	}
 
 }
