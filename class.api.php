@@ -16,9 +16,9 @@ class bmew_api {
 		// Build Body
 		$body = array(
 			'Data' => array(
-				'Field19' => current_time( 'm/d/Y' ),
 				'Email' => $email,
 				'EmailPerm' => 1,
+				'Field19' => current_time( 'm/d/Y' ),
 				'IPAddress' => bmew_api::get_client_ip(),
 			),
 		);
@@ -64,8 +64,7 @@ class bmew_api {
 	// Find a Contact By Email, Then Delete
 	static function delete_contact_by_email( $list_slug, $listID, $email ) {
 		$results = self::find_contact( $email );
-		if( empty( $results->Response->Data ) ) { return; }
-		$results = $results->Response->Data;
+		if( ! is_array( $results ) ) { return; }
 		foreach( $results as $row ) {
 			if( $row->ListName == bmew_frontend::$list_names[$list_slug] ) {
 				bmew_api::delete_contact( $listID, $row->ID );
