@@ -33,22 +33,22 @@ class bmew_frontend {
 
 		// Exit If Already Set-Up
 		$lists = get_option( 'bmew_lists' );
-		if( ! empty( $lists['abandons'] ) && ! empty( $lists['customers'] ) ) { return; }
+		if( ! empty( $lists[$key]['abandons'] ) && ! empty( $lists[$key]['customers'] ) ) { return; }
 
 		// Not Already Set-Up
 		if( ! is_array( $lists ) ) { $lists = array(); }
 		$updated = false;
 
 		// Check For Abandons List
-		if( empty( $lists['abandons'] ) ) {
+		if( empty( $lists[$key]['abandons'] ) ) {
 			$updated = true;
-			$lists['abandons'] = bmew_frontend::match_list( 'abandons' );
+			$lists[$key]['abandons'] = bmew_frontend::match_list( 'abandons' );
 		}
 
 		// Check For Registered Customers List
-		if( empty( $lists['customers'] ) ) {
+		if( empty( $lists[$key]['customers'] ) ) {
 			$updated = true;
-			$lists['customers'] = bmew_frontend::match_list( 'customers' );
+			$lists[$key]['customers'] = bmew_frontend::match_list( 'customers' );
 		}
 
 		// Update Stored Setting
@@ -96,8 +96,9 @@ class bmew_frontend {
 		global $woocommerce;
 
 		// Find Appropriate Contact List
+		$key = get_option( 'bmew_key' );
 		$lists = get_option( 'bmew_lists' );
-		$listID = $lists['abandons'];
+		$listID = $lists[$key]['abandons'];
 		if( ! $listID ) { return; }
 
 		// Get Fields From Order
@@ -180,14 +181,16 @@ class bmew_frontend {
 		// Exit If No Email Provided
 		if( ! $email ) { return; }
 
-		// Remove From Abandons List
+		// Get Lists
+		$key = get_option( 'bmew_key' );
 		$lists = get_option( 'bmew_lists' );
-		$listID = $lists['abandons'];
+
+		// Remove From Abandons List
+		$listID = $lists[$key]['abandons'];
 		bmew_api::delete_contact_by_email( 'abandons', $listID, $email );
 
-		// Find Appropriate Contact List
-		$lists = get_option( 'bmew_lists' );
-		$listID = $lists['customers'];
+		// Find Customers List
+		$listID = $lists[$key]['customers'];
 		if( ! $listID ) { return; }
 
 		// Get Cart Items

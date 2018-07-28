@@ -134,8 +134,9 @@ class bmew_admin {
 	static function wp_ajax__bmew_action__sync_customers() {
 
 		// Find Appropriate Contact List
+		$key = get_option( 'bmew_key' );
 		$lists = get_option( 'bmew_lists' );
-		$listID = $lists['customers'];
+		$listID = isset( $lists[$key]['customers'] ) ? $lists[$key]['customers'] : false;
 		if( ! $listID ) { return; }
 
 		// Query Orders
