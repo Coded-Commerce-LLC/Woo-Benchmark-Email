@@ -24,10 +24,11 @@ class bmew_api {
 		);
 		if( isset( $first ) ) { $body['Data']['FirstName'] = $first; }
 		if( isset( $last ) ) { $body['Data']['LastName'] = $last; }
-		if( isset( $product1 ) ) { $body['Data']['Field22'] = $product1; }
-		if( isset( $product2 ) ) { $body['Data']['Field23'] = $product2; }
+		if( isset( $product1 ) ) { $body['Data']['Field21'] = $product1; }
+		if( isset( $product2 ) ) { $body['Data']['Field22'] = $product2; }
+		if( isset( $product3 ) ) { $body['Data']['Field23'] = $product3; }
 		if( isset( $total ) ) { $body['Data']['Field24'] = $total; }
-		if( isset( $url ) ) { $body['Data']['Field21'] = $url; }
+		if( isset( $url ) ) { $body['Data']['Field18'] = $url; }
 
 		// Search Existing Records
 		$matches = bmew_api::find_contact( $email );

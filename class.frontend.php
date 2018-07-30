@@ -116,6 +116,7 @@ class bmew_frontend {
 			'last' => isset( $_POST['billing_last_name'] ) ? sanitize_text_field( $_POST['billing_last_name'] ) : '',
 			'product1' => isset( $products[0] ) ? $products[0] : '',
 			'product2' => isset( $products[1] ) ? $products[1] : '',
+			'product3' => isset( $products[2] ) ? $products[2] : '',
 			'total' => get_woocommerce_currency_symbol() . $woocommerce->cart->total,
 			'url' => wc_get_cart_url(),
 		);

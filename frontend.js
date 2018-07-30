@@ -37,7 +37,7 @@ function bmew_billing_email_checker( $ ) {
 			'billing_last_name': $( '#billing_last_name' ).val()
 		};
 		$.post( bmew_ajax_object.ajax_url, data, function( response ) {
-			alert( 'Abandoned cart for ' + response );
+			//alert( 'Abandoned cart for ' + response );
 		} );
 	}
 }
