@@ -142,4 +142,15 @@ class bmew_api {
 		$logger->debug( "==RESPONSE== " . $response, $context );
 	}
 
+	// Legacy XML-RPC API
+	static function benchmark_query_legacy() {
+		require_once( ABSPATH . WPINC . '/class-IXR.php' );
+		$url = 'https://api.benchmarkemail.com/1.3/';
+		$client = new IXR_Client( $url, false, 443, 15 );
+		$args = func_get_args();
+		call_user_func_array( array( $client, 'query' ), $args );
+		$response = $client->getResponse();
+		bmew_api::logger( $url, $args, $response );
+		return $response;
+	}
 }

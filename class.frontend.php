@@ -33,28 +33,35 @@ class bmew_frontend {
 
 		// Exit If Already Set-Up
 		$lists = get_option( 'bmew_lists' );
-		if( ! empty( $lists[$key]['abandons'] ) && ! empty( $lists[$key]['customers'] ) ) { return; }
+		if(
+			! empty( $lists[$key]['handshake'] )
+			&& ! empty( $lists[$key]['abandons'] )
+			&& ! empty( $lists[$key]['customers'] )
+		) {
+			return;
+		}
 
 		// Not Already Set-Up
 		if( ! is_array( $lists ) ) { $lists = array(); }
-		$updated = false;
+
+		// Register Vendor With API Key
+		if( empty( $lists[$key]['handshake'] ) ) {
+			bmew_api::benchmark_query_legacy( 'UpdatePartner', $key, 'beautomated' );
+			$lists[$key]['handshake'] = current_time( 'timestamp' );
+		}
 
 		// Check For Abandons List
 		if( empty( $lists[$key]['abandons'] ) ) {
-			$updated = true;
 			$lists[$key]['abandons'] = bmew_frontend::match_list( 'abandons' );
 		}
 
 		// Check For Registered Customers List
 		if( empty( $lists[$key]['customers'] ) ) {
-			$updated = true;
 			$lists[$key]['customers'] = bmew_frontend::match_list( 'customers' );
 		}
 
 		// Update Stored Setting
-		if( $updated ) {
-			update_option( 'bmew_lists', $lists );
-		}
+		update_option( 'bmew_lists', $lists );
 	}
 
 	// Add To Cart Redirects To Checkout
