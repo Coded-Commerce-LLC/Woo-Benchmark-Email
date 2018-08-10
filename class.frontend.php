@@ -46,7 +46,8 @@ class bmew_frontend {
 
 		// Register Vendor With API Key
 		if( empty( $lists[$key]['handshake'] ) ) {
-			bmew_api::benchmark_query_legacy( 'UpdatePartner', $key, 'beautomated' );
+			//bmew_api::benchmark_query_legacy( 'UpdatePartner', $key, 'beautomated' );
+			bmew_api::update_partner();
 			$lists[$key]['handshake'] = current_time( 'timestamp' );
 		}
 

@@ -106,6 +106,13 @@ class bmew_api {
 		return bmew_api::benchmark_query( 'Contact' );
 	}
 
+	// Vendor Handshake
+	static function update_partner() {
+		$uri = 'Client/Partner';
+		$body = array( 'PartnerLogin' => 'beautomated' );
+		$response = bmew_api::benchmark_query( $uri, 'POST', $body );
+	}
+
 	// Talk To Benchmark ReST API
 	static function benchmark_query( $uri = '', $method = 'GET', $body = null ) {
 
