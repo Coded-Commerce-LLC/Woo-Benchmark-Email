@@ -177,13 +177,7 @@ class bmew_frontend {
 	// At Order Creation Save Custom Checkout Fields
 	static function woocommerce_checkout_update_order_meta( $order_id ) {
 
-		// Proceed Only If Subscribe Selected
-		if( empty( $_POST['bmew_subscribe'] ) || $_POST['bmew_subscribe'] !== '1' ) { return; }
-
-		// Save Subscription Action To Order
-		update_post_meta( $order_id, '_bmew_subscribed', 'yes' );
-
-		// Get Fields
+		// Get Email Field
 		$email = isset( $_POST['billing_email'] ) ? $_POST['billing_email'] : '';
 
 		// Exit If No Email Provided
@@ -197,9 +191,15 @@ class bmew_frontend {
 		$listID = $lists[$key]['abandons'];
 		bmew_api::delete_contact_by_email( 'abandons', $listID, $email );
 
+		// Proceed Only If Subscribe Selected
+		if( empty( $_POST['bmew_subscribe'] ) || $_POST['bmew_subscribe'] !== '1' ) { return; }
+
 		// Find Customers List
 		$listID = $lists[$key]['customers'];
 		if( ! $listID ) { return; }
+
+		// Save Subscription Action To Order
+		update_post_meta( $order_id, '_bmew_subscribed', 'yes' );
 
 		// Get Cart Items
 		$products = bmew_frontend::get_products();
