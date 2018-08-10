@@ -43,7 +43,6 @@ if(
 
 	// Admin Hooks
 	add_action( 'admin_enqueue_scripts', [ 'bmew_admin', 'admin_enqueue_scripts' ] );
-	add_action( 'woocommerce_settings_bmew', [ 'bmew_admin', 'woocommerce_settings_bmew' ] );
 	add_filter( 'woocommerce_get_sections_advanced', [ 'bmew_admin', 'woocommerce_get_sections_advanced' ] );
 	add_filter( 'woocommerce_get_settings_advanced', [ 'bmew_admin', 'woocommerce_get_settings_advanced' ] );
 

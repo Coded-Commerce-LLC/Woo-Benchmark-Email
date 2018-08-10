@@ -4,12 +4,20 @@ var bmew_page = 1;
 
 // On Button Click
 jQuery( document ).ready( function( $ ) {
-	$( '#sync_customers' ).click( function() {
-		$( '#sync_complete' ).hide();
-		$( '#sync_progress_bar' ).empty();
-		$( '#sync_in_progress' ).show();
+
+	// Hide On Page Load
+	$( 'input#bmew_sync' ).hide();
+	$( 'span#sync_complete' ).hide();
+	$( 'span#sync_in_progress' ).hide();
+
+	// Handle Sync Request
+	$( 'a#sync_customers' ).click( function() {
+		$( 'span#sync_complete' ).hide();
+		$( 'span#sync_progress_bar' ).empty();
+		$( 'span#sync_in_progress' ).show();
 		bmew_page = 1;
 		bmew_query( $ );
+		return false;
 	} );
 } );
 
@@ -24,14 +32,14 @@ function bmew_query( $ ) {
 
 		// Handle Completion
 		if( response == 0 ) {
-			$( '#sync_in_progress' ).hide();
-			$( '#sync_progress_bar' ).empty();
-			$( '#sync_complete' ).show();
+			$( 'span#sync_in_progress' ).hide();
+			$( 'span#sync_progress_bar' ).empty();
+			$( 'span#sync_complete' ).show();
 			return;
 		}
 
 		// Display Page Processed
-		$( '#sync_progress_bar' ).append( ' ' + response );
+		$( 'span#sync_progress_bar' ).append( ' ' + response );
 
 		// Advance
 		bmew_page ++;
