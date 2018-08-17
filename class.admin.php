@@ -21,7 +21,7 @@ class bmew_admin {
 		//$response = bmew_api::delete_contact( ###, ### );
 		//$response = bmew_api::find_contact( 'sean+test01@codedcommerce.com' );
 
-		// Output Diagnostics
+		// Output Diagnostic Results
 		echo sprintf(
 			'<div class="notice notice-info is-dismissible"><p><pre>%s</pre></p></div>',
 			print_r( $response, true )
@@ -141,13 +141,13 @@ class bmew_admin {
 		$listID = isset( $lists[$key]['customers'] ) ? $lists[$key]['customers'] : false;
 		if( ! $listID ) { return; }
 
-		// Query Orders
+		// Query Orders Not Already Sync'd
 		$page = empty( $_POST['page'] ) ? 1 : intval( $_POST['page'] );
 		$args = array(
 			'limit' => 10,
 			'meta_compare' => 'NOT EXISTS',
 			'meta_key' => '_bmew_syncd',
-			'order' => 'DESC',
+			'order' => 'ASC',
 			'orderby' => 'ID',
 			'page' => $page,
 			'return' => 'ids',
@@ -156,28 +156,42 @@ class bmew_admin {
 		$orders = $query->get_orders();
 
 		// Loop Results
-		foreach( $orders as $post_id ) {
+		foreach( $orders as $order_id ) {
 
 			// Get Fields From Order
-			$email = get_post_meta( $post_id, '_billing_email', true );
+			$email = get_post_meta( $order_id, '_billing_email', true );
 
-			// Exit If No Email Provided
+			// Skip If No Email Provided
 			if( ! $email ) { continue; }
 
-			// Mark Order As Sync'd
-			update_post_meta( $post_id, '_bmew_syncd', current_time( 'timestamp' ) );
+			// Get Order Record
+			$_order = wc_get_order( $order_id );
+
+			// Get Cart Items
+			$products = bmew_frontend::get_products( $_order );
 
 			// Add Contact To List
 			$args = array(
-				'first' => get_post_meta( $post_id, '_billing_first_name', true ),
-				'last' => get_post_meta( $post_id, '_billing_last_name', true ),
-				'url' => wc_get_cart_url(),
+				'first' => get_post_meta( $order_id, '_billing_first_name', true ),
+				'last' => get_post_meta( $order_id, '_billing_last_name', true ),
+				'product1' => isset( $products[0] ) ? $products[0] : '',
+				'product2' => isset( $products[1] ) ? $products[1] : '',
+				'product3' => isset( $products[2] ) ? $products[2] : '',
+				'total' => get_woocommerce_currency_symbol() . $_order->get_total(),
+				'url' => $_order->get_view_order_url(),
 			);
-			bmew_api::add_contact( $listID, $email, $args );
+			$response = bmew_api::add_contact( $listID, $email, $args );
+
+			// If Successful, Mark Order As Sync'd
+			if( intval( $response ) > 0 ) {
+				update_post_meta( $order_id, '_bmew_syncd', current_time( 'timestamp' ) );
+			}
 		}
+
+		// Handle Finish
 		if( ! $orders ) { $page = 0; }
 
-		// Exit
+		// Exit With Progress Level
 		echo $page;
 		wp_die();
 	}

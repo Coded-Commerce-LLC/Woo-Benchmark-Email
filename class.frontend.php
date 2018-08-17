@@ -27,11 +27,11 @@ class bmew_frontend {
 	// Initialize Contact Lists
 	static function init_contact_lists() {
 
-		// Exit If No API Key Is Set
+		// Skip If No API Key Is Set
 		$key = get_option( 'bmew_key' );
 		if( empty( $key ) ) { return; }
 
-		// Exit If Already Set-Up
+		// Skip If Already Set-Up
 		$lists = get_option( 'bmew_lists' );
 		if(
 			! empty( $lists[$key]['handshake'] )
@@ -112,7 +112,7 @@ class bmew_frontend {
 		// Get Fields From Order
 		$email = isset( $_POST['email'] ) ? sanitize_email( $_POST['email'] ) : '';
 
-		// Exit If No Email Provided
+		// Skip If No Email Provided
 		if( ! $email ) { return; }
 
 		// Get Cart Items
@@ -128,23 +128,38 @@ class bmew_frontend {
 			'total' => get_woocommerce_currency_symbol() . $woocommerce->cart->total,
 			'url' => wc_get_cart_url(),
 		);
-		print_r( bmew_api::add_contact( $listID, $email, $args ) );
+		$response = bmew_api::add_contact( $listID, $email, $args );
 
-		// Exit
+		// Output Result And Exit
+		print_r( $response );
 		wp_die();
 	}
 
 	// Get Cart Details
-	static function get_products() {
-		global $woocommerce;
+	static function get_products( $_order = false ) {
+
+		// Using Order Object
+		if( $_order ) {
+			$items = $_order->get_items();
+		}
+
+		// Using Cart Session
+		else {
+			global $woocommerce;
+			$items = $woocommerce->cart->get_cart();
+		}
+
+		// Loop Order Items
 		$products = array();
-		foreach( $woocommerce->cart->get_cart() as $item ) {
+		foreach( $items as $item ) {
 			$_product = wc_get_product( $item['product_id'] );
 			$products[] = $_product->get_title()
 				. ', quantity ' . $item['quantity']
 				. ', price ' . get_woocommerce_currency_symbol()
 				. get_post_meta( $item['product_id'] , '_price', true );
 		}
+
+		// Return Products
 		return $products;
 	}
 
@@ -181,7 +196,7 @@ class bmew_frontend {
 		// Get Email Field
 		$email = isset( $_POST['billing_email'] ) ? $_POST['billing_email'] : '';
 
-		// Exit If No Email Provided
+		// Skip If No Email Provided
 		if( ! $email ) { return; }
 
 		// Get Lists
@@ -202,11 +217,11 @@ class bmew_frontend {
 		// Save Subscription Action To Order
 		update_post_meta( $order_id, '_bmew_subscribed', 'yes' );
 
-		// Get Cart Items
-		$products = bmew_frontend::get_products();
-
 		// Get Order Record
 		$_order = wc_get_order( $order_id );
+
+		// Get Cart Items
+		$products = bmew_frontend::get_products( $_order );
 
 		// Add Contact To List
 		$args = array(
