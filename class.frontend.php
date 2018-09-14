@@ -73,7 +73,7 @@ class bmew_frontend {
 		return wc_get_checkout_url();
 	}
 
-	// Reorder checkout contact fields
+	// Reorder Checkout Contact Fields
 	static function woocommerce_billing_fields( $fields ) {
 		$bmew_checkout_reorder = get_option( 'bmew_checkout_reorder' );
 		if( $bmew_checkout_reorder != 'yes' ) { return $fields; }
@@ -99,7 +99,7 @@ class bmew_frontend {
 		}
 	}
 
-	// Abandoned Cart Submission
+	// Checkout Form AJAX - Capture Abandons
 	static function wp_ajax__bmew_action__abandoned_cart() {
 		global $woocommerce;
 
@@ -135,7 +135,40 @@ class bmew_frontend {
 		wp_die();
 	}
 
-	// Get Cart Details
+	// Hooked Into Woo Add To Cart - Capture Abandons
+	static function woocommerce_add_to_cart() {
+		global $woocommerce;
+
+		// Logged In Users Or Previous Woo Sessions Only
+		$session_customer = $woocommerce->session->get( 'customer' );
+		$email = isset( $session_customer[ 'email' ] ) ? $session_customer[ 'email' ] : '';
+
+		// Skip If No Email Provided
+		if( ! $email ) { return; }
+
+		// Find Appropriate Contact List
+		$key = get_option( 'bmew_key' );
+		$lists = get_option( 'bmew_lists' );
+		$listID = $lists[$key]['abandons'];
+		if( ! $listID ) { return; }
+
+		// Get Cart Items
+		$products = bmew_frontend::get_products();
+
+		// Add Contact To List
+		$args = array(
+			'first' => isset( $_POST['billing_first_name'] ) ? sanitize_text_field( $_POST['billing_first_name'] ) : '',
+			'last' => isset( $_POST['billing_last_name'] ) ? sanitize_text_field( $_POST['billing_last_name'] ) : '',
+			'product1' => isset( $products[0] ) ? $products[0] : '',
+			'product2' => isset( $products[1] ) ? $products[1] : '',
+			'product3' => isset( $products[2] ) ? $products[2] : '',
+			'total' => get_woocommerce_currency_symbol() . $woocommerce->cart->total,
+			'url' => wc_get_cart_url(),
+		);
+		$response = bmew_api::add_contact( $listID, $email, $args );
+	}
+
+	// Get Cart Details - Helper Function
 	static function get_products( $_order = false ) {
 
 		// Using Order Object
@@ -163,7 +196,7 @@ class bmew_frontend {
 		return $products;
 	}
 
-	// Filter WooCommerce Checkout Fields
+	// Filter WooCommerce Checkout Fields - Moves Email Field Up
 	static function woocommerce_checkout_fields( $fields ) {
 
 		// Get Opt-In Field Label Setting
@@ -190,7 +223,7 @@ class bmew_frontend {
 		return $fields;
 	}
 
-	// At Order Creation Save Custom Checkout Fields
+	// At Order Creation - Save Custom Checkout Fields
 	static function woocommerce_checkout_update_order_meta( $order_id ) {
 
 		// Get Email Field
@@ -236,7 +269,7 @@ class bmew_frontend {
 		bmew_api::add_contact( $listID, $email, $args );
 	}
 
-	// Helper To Match a Contact List
+	// Match a Contact List - Helper Function
 	static function match_list( $list_slug ) {
 
 		// Load Lists, If Not Already Loaded

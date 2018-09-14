@@ -25,21 +25,22 @@ var bmew_input_delay = ( function() {
 // Checks Email Form
 function bmew_billing_email_checker( $ ) {
 
-	// Check If Complete Field
-	if( bmew_is_email( $( '#billing_email' ).val() ) ) {
-
-		// Save For Abandoned Cart Automations
-		var data = {
-			'action': 'bmew_action',
-			'sync': 'abandoned_cart',
-			'email': $( '#billing_email' ).val(),
-			'billing_first_name': $( '#billing_first_name' ).val(),
-			'billing_last_name': $( '#billing_last_name' ).val()
-		};
-		$.post( bmew_ajax_object.ajax_url, data, function( response ) {
-			//alert( 'Abandoned cart for ' + response );
-		} );
+	// Require Completed Email Address
+	if( ! bmew_is_email( $( '#billing_email' ).val() ) ) {
+		return false;
 	}
+
+	// Save For Abandoned Cart Automations
+	var data = {
+		'action': 'bmew_action',
+		'sync': 'abandoned_cart',
+		'email': $( '#billing_email' ).val(),
+		'billing_first_name': $( '#billing_first_name' ).val(),
+		'billing_last_name': $( '#billing_last_name' ).val()
+	};
+	$.post( bmew_ajax_object.ajax_url, data, function( response ) {
+		//alert( 'Abandoned cart for ' + response );
+	} );
 }
 
 // Validate Email Address String
