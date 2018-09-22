@@ -8,7 +8,6 @@ Separate from optional Benchmark Email Lite plugin, this setting connects to one
 Settings located in WP Admin > WooCommerce > Settings > Advanced > Benchmark Email
 
 ### Feature: Customer carts to Woo Abandoned Carts list
-- There is a TEMPORARY diagnostic feature to alert to the screen on transmissions.
 - Any time somebody clicks to go to the checkout page their email address, name, and cart details get sent to the Woo Abandoned Carts contact list.
 - They may be logged in and this field might be pre-populated, still works.
 - They may be making a purchase as a Guest and the field gets caught as typed.
@@ -27,7 +26,6 @@ Settings located in WP Admin > WooCommerce > Settings > Advanced > Benchmark Ema
 ### Feature: Sync all order history to Woo Customers list
 - Copies all historic orders, whether Guest or Registered customers to Woo Customers list.
 - Uses AJAX to prevent timeouts, but may run for some time on larger stores.
-- A better UI is pending with a progress bar.
 
 ## Support
 
