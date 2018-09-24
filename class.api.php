@@ -141,7 +141,7 @@ class bmew_api {
 		$bmew_debug = get_option( 'bmew_debug' );
 		if( ! $bmew_debug ) { return; }
 		$logger = wc_get_logger();
-		$context = array( 'source' => 'benchmark-email-woo' );
+		$context = array( 'source' => 'woo-benchmark-email' );
 		$request = print_r( $request, true );
 		$response = print_r( $response, true );
 		$logger->info( "==URL== " . $url, $context );

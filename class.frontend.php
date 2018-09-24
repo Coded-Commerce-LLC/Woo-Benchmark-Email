@@ -14,7 +14,7 @@ class bmew_frontend {
 
 	// Load Translations
 	static function plugins_loaded() {
-		load_plugin_textdomain( 'benchmark-email-woo', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+		load_plugin_textdomain( 'woo-benchmark-email', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 	}
 
 	// AJAX Load Script

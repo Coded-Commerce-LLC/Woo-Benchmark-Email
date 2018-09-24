@@ -50,49 +50,49 @@ class bmew_admin {
 
 			// Add API Key Field
 			array(
-				'desc' => '<br>' . __( 'Skips the cart step and redirects customers to the checkout form that conveniently displays a mini cart.', 'benchmark-email-woo' )
-					. '<br>' . __( "If they need to edit their cart, they will have to click on your theme's cart link in order to do so.", 'benchmark-email-woo' ),
-				'desc_tip' => __( 'This may improve the chances of the email address being provided by customers and thus available to abandoned cart offers.', 'benchmark-email-woo' ),
+				'desc' => '<br>' . __( 'Skips the cart step and redirects customers to the checkout form that conveniently displays a mini cart.', 'woo-benchmark-email' )
+					. '<br>' . __( "If they need to edit their cart, they will have to click on your theme's cart link in order to do so.", 'woo-benchmark-email' ),
+				'desc_tip' => __( 'This may improve the chances of the email address being provided by customers and thus available to abandoned cart offers.', 'woo-benchmark-email' ),
 				'id' => 'bmew_skip_cart',
-				'name' => __( 'Skip the cart step', 'benchmark-email-woo' ),
+				'name' => __( 'Skip the cart step', 'woo-benchmark-email' ),
 				'type' => 'checkbox',
 			),
 
 			// Add API Key Field
 			array(
-				'desc' => '<br>' . __( 'Moves the email address and phone number fields up and underneath the name fields.', 'benchmark-email-woo' ),
-				'desc_tip' => __( 'This may improve the chances of the email address being provided by customers and thus available to abandoned cart offers.', 'benchmark-email-woo' ),
+				'desc' => '<br>' . __( 'Moves the email address and phone number fields up and underneath the name fields.', 'woo-benchmark-email' ),
+				'desc_tip' => __( 'This may improve the chances of the email address being provided by customers and thus available to abandoned cart offers.', 'woo-benchmark-email' ),
 				'id' => 'bmew_checkout_reorder',
-				'name' => __( 'Move email field up', 'benchmark-email-woo' ),
+				'name' => __( 'Move email field up', 'woo-benchmark-email' ),
 				'type' => 'checkbox',
 			),
 
 			// Add Text Field Option
 			array(
-				'default' => __( 'Opt-in to receive exclusive customer communications', 'benchmark-email-woo' ),
-				'desc' => '<br>' . __( 'Checkout form opt-in field label', 'benchmark-email-woo' ),
-				'desc_tip' => __( 'Label for checkout form opt-in checkbox field.', 'benchmark-email-woo' ) . ' '
-					. __( 'Leave this setting blank to eliminate the opt-in field from your checkout form.', 'benchmark-email-woo' ),
+				'default' => __( 'Opt-in to receive exclusive customer communications', 'woo-benchmark-email' ),
+				'desc' => '<br>' . __( 'Checkout form opt-in field label', 'woo-benchmark-email' ),
+				'desc_tip' => __( 'Label for checkout form opt-in checkbox field.', 'woo-benchmark-email' ) . ' '
+					. __( 'Leave this setting blank to eliminate the opt-in field from your checkout form.', 'woo-benchmark-email' ),
 				'id' => 'bmew_checkout_optin_label',
-				'name' => __( 'Checkout Opt-In Field', 'benchmark-email-woo' ),
+				'name' => __( 'Checkout Opt-In Field', 'woo-benchmark-email' ),
 				'type' => 'text',
 			),
 
 			// Add API Key Field
 			array(
-				'desc' => '<br>' . __( 'API Key from your Benchmark Email account', 'benchmark-email-woo' ),
-				'desc_tip' => __( 'Log into https://ui.benchmarkemail.com and copy your API key here.', 'benchmark-email-woo' ),
+				'desc' => '<br>' . __( 'API Key from your Benchmark Email account', 'woo-benchmark-email' ),
+				'desc_tip' => __( 'Log into https://ui.benchmarkemail.com and copy your API key here.', 'woo-benchmark-email' ),
 				'id' => 'bmew_key',
-				'name' => __( 'API Key', 'benchmark-email-woo' ),
+				'name' => __( 'API Key', 'woo-benchmark-email' ),
 				'type' => 'text',
 			),
 
 			// Add API Key Field
 			array(
-				'desc' => '<br>' . __( 'For temporary use, saves all API communications into WooCommerce > Status > Logs.', 'benchmark-email-woo' ),
-				'desc_tip' => __( "For a nicer logs UI, set `define( 'WC_LOG_HANDLER', 'WC_Log_Handler_DB' );` inside your  `wp-config.php`.", 'benchmark-email-woo' ),
+				'desc' => '<br>' . __( 'For temporary use, saves all API communications into WooCommerce > Status > Logs.', 'woo-benchmark-email' ),
+				'desc_tip' => __( "For a nicer logs UI, set `define( 'WC_LOG_HANDLER', 'WC_Log_Handler_DB' );` inside your  `wp-config.php`.", 'woo-benchmark-email' ),
 				'id' => 'bmew_debug',
-				'name' => __( 'Log debug messages?', 'benchmark-email-woo' ),
+				'name' => __( 'Log debug messages?', 'woo-benchmark-email' ),
 				'type' => 'checkbox',
 			),
 
@@ -106,19 +106,19 @@ class bmew_admin {
 						<span id="sync_in_progress" style="display:none;">
 							' . sprintf(
 								"<strong>%s</strong> %s",
-								__( 'Please wait.', 'benchmark-email-woo' ),
-								__( 'Syncing at 10 orders per page, completed pages...', 'benchmark-email-woo' )
+								__( 'Please wait.', 'woo-benchmark-email' ),
+								__( 'Syncing at 10 orders per page, completed pages...', 'woo-benchmark-email' )
 							) . '
 						</span>
 						<span id="sync_progress_bar"></span>
 						<span id="sync_complete" style="display:none;">
-							' . __( 'Finished Customer Sync.', 'benchmark-email-woo' ) . '
+							' . __( 'Finished Customer Sync.', 'woo-benchmark-email' ) . '
 						</span>
 					</p>
 				',
-				'desc_tip' => __( 'This will sync all historic customers to Benchmark Email.', 'benchmark-email-woo' ),
+				'desc_tip' => __( 'This will sync all historic customers to Benchmark Email.', 'woo-benchmark-email' ),
 				'id' => 'bmew_sync',
-				'name' => __( 'Sync historic customers', 'benchmark-email-woo' ),
+				'name' => __( 'Sync historic customers', 'woo-benchmark-email' ),
 				'type' => 'checkbox',
 			),
 

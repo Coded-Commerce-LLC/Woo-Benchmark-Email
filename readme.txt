@@ -1,7 +1,7 @@
-=== Benchmark Email Woo ===
-Contributors: seanconklin
+=== Woo Benchmark Email ===
+Contributors: seanconklin, randywsandberg
 Donate link: https://codedcommerce.com/donate
-Tags: abandoned cart, customer newsletters, marketing automation
+Tags: abandoned cart, customer newsletters, marketing automation, Benchmark Email, WooCommerce
 Requires at least: 4.0.1
 Tested up to: 5.0
 Requires PHP: 5.6
@@ -12,6 +12,8 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Connects WooCommerce with Benchmark Email - syncing customers and abandoned carts.
 
 == Description ==
+
+[youtube https://www.youtube.com/watch?v=c0BGIXT8xMk]
 
 Feature: Connect to Benchmark Email ReST API
 * Separate from optional Benchmark Email Lite plugin, this setting connects to one API key for WooCommerce specific communications.
@@ -39,7 +41,7 @@ Feature: Sync all order history to Woo Customers list
 
 == Installation ==
 
-1. Upload the plugin files to the `/wp-content/plugins/benchmark-email-woo` directory, or install the plugin through the WordPress plugins screen directly.
+1. Upload the plugin files to the `/wp-content/plugins/woo-benchmark-email` directory, or install the plugin through the WordPress plugins screen directly.
 1. Activate the plugin through the 'Plugins' screen in WordPress
 1. Use the `WooCommerce->Settings->Advanced->Benchmark Email` screen to configure the plugin
 
@@ -50,7 +52,7 @@ Feature: Sync all order history to Woo Customers list
 
 == Changelog ==
 
-= 1.0 =
+= 1.0 on 2018-09-23 =
 * Initial release
 
 == Upgrade Notice ==
