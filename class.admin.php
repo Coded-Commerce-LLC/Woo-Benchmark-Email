@@ -6,27 +6,92 @@ if( ! defined( 'ABSPATH' ) ) { exit; }
 // Administrative / Settings Class
 class bmew_admin {
 
+
+	/**********************
+		Admin Messaging
+	**********************/
+
 	// Admin Dashboard Diagnostics Function
 	static function wp_dashboard_setup() {
 
-		/*
+		/******************
 			Diagnostics
-		*/
-		$response = get_option( 'bmew_lists' );
-		//$response = bmew_api::add_list( 'WooCommerce Test List' );
-		//$response = bmew_api::get_lists();
-		//$response = bmew_frontend::match_list( 'abandons' );
-		//$response = bmew_api::get_contact( ###, ### );
-		//$response = bmew_api::add_contact( ###, 'sean_test01@codedcommerce.com', [ 'first' => 'Test' ] );
-		//$response = bmew_api::delete_contact( ###, ### );
-		//$response = bmew_api::find_contact( 'sean+test01@codedcommerce.com' );
+		******************/
 
-		// Output Diagnostic Results
-		echo sprintf(
-			'<div class="notice notice-info is-dismissible"><p><pre>%s</pre></p></div>',
-			print_r( $response, true )
+		$message = '';
+		//$message = get_option( 'bmew_lists' );
+		//$message = bmew_api::add_list( 'WooCommerce Test List' );
+		//$message = bmew_api::get_lists();
+		//$message = bmew_frontend::match_list( 'abandons' );
+		//$message = bmew_api::get_contact( ###, ### );
+		//$message = bmew_api::add_contact( ###, 'sean_test01@codedcommerce.com', [ 'first' => 'Test' ] );
+		//$message = bmew_api::delete_contact( ###, ### );
+		//$message = bmew_api::find_contact( 'sean+test01@codedcommerce.com' );
+
+
+		/*********************
+			Sister Product
+		*********************/
+
+		if(
+			is_plugin_inactive( 'benchmark-email-lite/benchmark-email-lite.php' )
+			&& current_user_can( 'activate_plugins' )
+		) {
+			if( file_exists( WP_PLUGIN_DIR . '/benchmark-email-lite/benchmark-email-lite.php' ) ) {
+				$message =
+					__( 'Activate our sister product Benchmark Email Lite to view campaign statistics.', 'woo-benchmark-email' )
+					. ' <strong><a href="' . bmew_admin::get_sister_activate_link() . '">'
+					. __( 'Activate Now', 'woo-benchmark-email' )
+					. '</a></strong>';
+			} else {
+				$message =
+					__( 'Install our sister product Benchmark Email Lite to view campaign statistics.', 'woo-benchmark-email' )
+					. ' <strong><a href="' . bmew_admin::get_sister_install_link() . '">'
+					. __( 'Install Now', 'woo-benchmark-email' )
+					. '</a></strong>';
+			}
+
+		}
+
+		// Output Message
+		if( $message ) {
+			echo sprintf(
+				'<div class="notice notice-info is-dismissible"><p>%s</p></div>',
+				print_r( $message, true )
+			);
+		}
+	}
+
+	// Sister Install Link
+	static function get_sister_install_link() {
+		$action = 'install-plugin';
+		$slug = 'benchmark-email-lite';
+		return wp_nonce_url(
+			add_query_arg(
+				array(
+					'action' => $action,
+					'plugin' => $slug
+				),
+				admin_url( 'update.php' )
+			),
+			$action . '_' . $slug
 		);
 	}
+
+	// Sister Activate Link
+	static function get_sister_activate_link( $action='activate' ) {
+		$plugin = 'benchmark-email-lite/benchmark-email-lite.php';
+		$plugin = str_replace( '\/', '%2F', $plugin );
+		$url = sprintf( admin_url( 'plugins.php?action=' . $action . '&plugin=%s&plugin_status=all&paged=1&s' ), $plugin );
+		$_REQUEST['plugin'] = $plugin;
+		$url = wp_nonce_url( $url, $action . '-plugin_' . $plugin );
+		return $url;
+	}
+
+
+	/***************************
+		WooCommerce Settings
+	***************************/
 
 	// Create The Section Beneath The Advanced Tab
 	static function woocommerce_get_sections_advanced( $sections ) {

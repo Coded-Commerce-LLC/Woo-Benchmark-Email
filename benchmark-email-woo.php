@@ -44,9 +44,7 @@ if(
 	add_action( 'admin_enqueue_scripts', [ 'bmew_admin', 'admin_enqueue_scripts' ] );
 	add_filter( 'woocommerce_get_sections_advanced', [ 'bmew_admin', 'woocommerce_get_sections_advanced' ] );
 	add_filter( 'woocommerce_get_settings_advanced', [ 'bmew_admin', 'woocommerce_get_settings_advanced' ] );
-
-	// Diagnostics Hook
-	//add_action( 'wp_dashboard_setup', [ 'bmew_admin', 'wp_dashboard_setup' ] );
+	add_action( 'wp_dashboard_setup', [ 'bmew_admin', 'wp_dashboard_setup' ] );
 
 	// AJAX Hooks
 	add_action( 'wp_ajax_bmew_action', [ 'bmew_frontend', 'wp_ajax__bmew_action' ] );
