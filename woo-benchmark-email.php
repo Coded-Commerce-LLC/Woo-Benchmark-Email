@@ -1,14 +1,14 @@
 <?php
 /**
- * Plugin Name: Woo Benchmark Email
- * Plugin URI: https://codedcommerce.com/product/woo-benchmark-email/
+ * Plugin Name: Benchmark Email Woo
+ * Plugin URI: https://codedcommerce.com/product/benchmark-email-woocommerce
  * Description: Connects WooCommerce with Benchmark Email for syncing customers and abandoned carts.
  * Version: 1.0
  * Author: Coded Commerce, LLC
  * Author URI: https://codedcommerce.com
  * Developer: Sean Conklin
  * Developer URI: https://seanconklin.wordpress.com
- * Text Domain: woo-benchmark-email
+ * Text Domain: benchmark-email-woo
  * Domain Path: /languages
  *
  * WC requires at least: 3.0
@@ -44,9 +44,7 @@ if(
 	add_action( 'admin_enqueue_scripts', [ 'bmew_admin', 'admin_enqueue_scripts' ] );
 	add_filter( 'woocommerce_get_sections_advanced', [ 'bmew_admin', 'woocommerce_get_sections_advanced' ] );
 	add_filter( 'woocommerce_get_settings_advanced', [ 'bmew_admin', 'woocommerce_get_settings_advanced' ] );
-
-	// Diagnostics Hook
-	//add_action( 'wp_dashboard_setup', [ 'bmew_admin', 'wp_dashboard_setup' ] );
+	add_action( 'wp_dashboard_setup', [ 'bmew_admin', 'wp_dashboard_setup' ] );
 
 	// AJAX Hooks
 	add_action( 'wp_ajax_bmew_action', [ 'bmew_frontend', 'wp_ajax__bmew_action' ] );
