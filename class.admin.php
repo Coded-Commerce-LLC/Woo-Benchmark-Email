@@ -14,6 +14,7 @@ class bmew_admin {
 	// Admin Dashboard Diagnostics Function
 	static function wp_dashboard_setup() {
 
+
 		/******************
 			Diagnostics
 		******************/
@@ -33,24 +34,46 @@ class bmew_admin {
 			Sister Product
 		*********************/
 
+		// Handle Dismissal Request
+		if( ! empty( $_REQUEST['bmew_dismiss_sister'] ) && check_admin_referer( 'bmew_dismiss_sister' ) ) {
+			update_option( 'bmew_sister_dismissed', current_time( 'timestamp') );
+		}
+
+		// Check Sister Product
+		$bmew_sister_dismissed = get_option( 'bmew_sister_dismissed' );
 		if(
-			is_plugin_inactive( 'benchmark-email-lite/benchmark-email-lite.php' )
+			$bmew_sister_dismissed < current_time( 'timestamp') - 86400 * 90
+			&& is_plugin_inactive( 'benchmark-email-lite/benchmark-email-lite.php' )
 			&& current_user_can( 'activate_plugins' )
 		) {
+
+			// Plugin Installed But Not Activated
 			if( file_exists( WP_PLUGIN_DIR . '/benchmark-email-lite/benchmark-email-lite.php' ) ) {
 				$message =
 					__( 'Activate our sister product Benchmark Email Lite to view campaign statistics.', 'woo-benchmark-email' )
-					. ' <strong><a href="' . bmew_admin::get_sister_activate_link() . '">'
-					. __( 'Activate Now', 'woo-benchmark-email' )
-					. '</a></strong>';
+					. sprintf(
+						' &nbsp; <strong style="font-size:1.25em;"><a href="%s">%s</a></strong>',
+						bmew_admin::get_sister_activate_link(),
+						__( 'Activate Now', 'woo-benchmark-email' )
+					);
+
+			// Plugin Not Installed
 			} else {
 				$message =
 					__( 'Install our sister product Benchmark Email Lite to view campaign statistics.', 'woo-benchmark-email' )
-					. ' <strong><a href="' . bmew_admin::get_sister_install_link() . '">'
-					. __( 'Install Now', 'woo-benchmark-email' )
-					. '</a></strong>';
+					. sprintf(
+						' &nbsp; <strong style="font-size:1.25em;"><a href="%s">%s</a></strong>',
+						bmew_admin::get_sister_install_link(),
+						__( 'Install Now', 'woo-benchmark-email' )
+					);
 			}
 
+			// Dismiss Link
+			$message .= sprintf(
+				' <a style="float:right;" href="%s">%s</a>',
+				bmew_admin::get_sister_dismiss_link(),
+				__( 'dismiss for 90 days', 'woo-benchmark-email' )
+			);
 		}
 
 		// Output Message
@@ -68,10 +91,7 @@ class bmew_admin {
 		$slug = 'benchmark-email-lite';
 		return wp_nonce_url(
 			add_query_arg(
-				array(
-					'action' => $action,
-					'plugin' => $slug
-				),
+				array( 'action' => $action, 'plugin' => $slug ),
 				admin_url( 'update.php' )
 			),
 			$action . '_' . $slug
@@ -81,10 +101,19 @@ class bmew_admin {
 	// Sister Activate Link
 	static function get_sister_activate_link( $action='activate' ) {
 		$plugin = 'benchmark-email-lite/benchmark-email-lite.php';
-		$plugin = str_replace( '\/', '%2F', $plugin );
-		$url = sprintf( admin_url( 'plugins.php?action=' . $action . '&plugin=%s&plugin_status=all&paged=1&s' ), $plugin );
 		$_REQUEST['plugin'] = $plugin;
-		$url = wp_nonce_url( $url, $action . '-plugin_' . $plugin );
+		return wp_nonce_url(
+			add_query_arg(
+				array( 'action' => $action, 'plugin' => $plugin, 'plugin_status' => 'all', 'paged' => '1&s' ),
+				admin_url( 'plugins.php' )
+			),
+			$action . '-plugin_' . $plugin
+		);
+	}
+
+	// Sister Dismiss Notice Link
+	static function get_sister_dismiss_link() {
+		$url = wp_nonce_url( 'index.php?bmew_dismiss_sister=1', 'bmew_dismiss_sister' );
 		return $url;
 	}
 
