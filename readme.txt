@@ -52,10 +52,16 @@ Feature: Sync all order history to Woo Customers list
 
 == Changelog ==
 
+= 1.1 on 2018-11-01 =
+* Added sister product activation and installation checks and message
+
 = 1.0 on 2018-09-23 =
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.1 =
+* Minor update
 
 = 1.0 =
 * Initial release
