@@ -30,6 +30,24 @@ class bmew_api {
 		if( isset( $total ) ) { $body['Data']['Field24'] = $total; }
 		if( isset( $url ) ) { $body['Data']['Field18'] = $url; }
 
+		// Order Details
+		if( isset( $phone ) ) { $body['Data']['Field6'] = $phone; }
+		if( isset( $company ) ) { $body['Data']['Field9'] = $company; }
+
+		// Billing Address
+		if( isset( $b_address ) ) { $body['Data']['Field1'] = $b_address; }
+		if( isset( $b_city ) ) { $body['Data']['Field2'] = $b_city; }
+		if( isset( $b_state ) ) { $body['Data']['Field3'] = $b_state; }
+		if( isset( $b_zip ) ) { $body['Data']['Field4'] = $b_zip; }
+		if( isset( $b_country ) ) { $body['Data']['Field5'] = $b_country; }
+
+		// Shipping Address
+		if( isset( $s_address ) ) { $body['Data']['Field13'] = $s_address; }
+		if( isset( $s_city ) ) { $body['Data']['Field14'] = $s_city; }
+		if( isset( $s_state ) ) { $body['Data']['Field15'] = $s_state; }
+		if( isset( $s_zip ) ) { $body['Data']['Field16'] = $s_zip; }
+		if( isset( $s_country ) ) { $body['Data']['Field17'] = $s_country; }
+
 		// Search Existing Records
 		$matches = bmew_api::find_contact( $email );
 		foreach( $matches as $match ) {

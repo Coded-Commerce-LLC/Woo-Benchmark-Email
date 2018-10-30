@@ -265,6 +265,28 @@ class bmew_frontend {
 			'product3' => isset( $products[2] ) ? $products[2] : '',
 			'total' => get_woocommerce_currency_symbol() . $_order->get_total(),
 			'url' => $_order->get_view_order_url(),
+
+			// Order Details
+			'phone' => get_post_meta( $order_id, '_billing_phone', true ),
+			'company' => get_post_meta( $order_id, '_billing_company', true ),
+			'b_address' => sprintf(
+				'%s %s',
+				get_post_meta( $order_id, '_billing_address_1', true )
+				get_post_meta( $order_id, '_billing_address_2', true )
+			),
+			'b_city' => get_post_meta( $order_id, '_billing_city', true ),
+			'b_state' => get_post_meta( $order_id, '_billing_state', true ),
+			'b_zip' => get_post_meta( $order_id, '_billing_postcode', true ),
+			'b_country' => get_post_meta( $order_id, '_billing_country', true ),
+			's_address' => sprintf(
+				'%s %s',
+				get_post_meta( $order_id, '_shipping_address_1', true )
+				get_post_meta( $order_id, '_shipping_address_2', true )
+			),
+			's_city' => get_post_meta( $order_id, '_shipping_city', true ),
+			's_state' => get_post_meta( $order_id, '_shipping_state', true ),
+			's_zip' => get_post_meta( $order_id, '_shipping_postcode', true ),
+			's_country' => get_post_meta( $order_id, '_shipping_country', true ),
 		);
 		bmew_api::add_contact( $listID, $email, $args );
 	}
