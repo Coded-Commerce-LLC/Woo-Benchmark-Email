@@ -91,7 +91,7 @@ class bmew_admin {
 		$slug = 'benchmark-email-lite';
 		return wp_nonce_url(
 			add_query_arg(
-				array( 'action' => $action, 'plugin' => $slug ),
+				[ 'action' => $action, 'plugin' => $slug ],
 				admin_url( 'update.php' )
 			),
 			$action . '_' . $slug
@@ -104,7 +104,7 @@ class bmew_admin {
 		$_REQUEST['plugin'] = $plugin;
 		return wp_nonce_url(
 			add_query_arg(
-				array( 'action' => $action, 'plugin' => $plugin, 'plugin_status' => 'all', 'paged' => '1&s' ),
+				[ 'action' => $action, 'plugin' => $plugin, 'plugin_status' => 'all', 'paged' => '1&s' ],
 				admin_url( 'plugins.php' )
 			),
 			$action . '-plugin_' . $plugin
@@ -122,108 +122,15 @@ class bmew_admin {
 		WooCommerce Settings
 	***************************/
 
-	// Create The Section Beneath The Advanced Tab
-	static function woocommerce_get_sections_advanced( $sections ) {
-		$sections['bmew'] = 'Benchmark Email';
-		return $sections;
-	}
-
-	// Create The Setting Within The Custom Section
-	static function woocommerce_get_settings_advanced( $settings ) {
-
-		// Check The Current Section Is What We Want
-		if( ! isset( $_REQUEST['section'] ) || $_REQUEST['section'] != 'bmew' ) {
-			return $settings;
-		}
-
-		// Response Data
-		return array(
-
-			// Add Section Title
-			array( 'desc' => '', 'id' => 'bmew', 'name' => 'Benchmark Email', 'type' => 'title' ),
-
-			// Add API Key Field
-			array(
-				'desc' => '<br>' . __( 'Skips the cart step and redirects customers to the checkout form that conveniently displays a mini cart.', 'woo-benchmark-email' )
-					. '<br>' . __( "If they need to edit their cart, they will have to click on your theme's cart link in order to do so.", 'woo-benchmark-email' ),
-				'desc_tip' => __( 'This may improve the chances of the email address being provided by customers and thus available to abandoned cart offers.', 'woo-benchmark-email' ),
-				'id' => 'bmew_skip_cart',
-				'name' => __( 'Skip the cart step', 'woo-benchmark-email' ),
-				'type' => 'checkbox',
-			),
-
-			// Add API Key Field
-			array(
-				'desc' => '<br>' . __( 'Moves the email address and phone number fields up and underneath the name fields.', 'woo-benchmark-email' ),
-				'desc_tip' => __( 'This may improve the chances of the email address being provided by customers and thus available to abandoned cart offers.', 'woo-benchmark-email' ),
-				'id' => 'bmew_checkout_reorder',
-				'name' => __( 'Move email field up', 'woo-benchmark-email' ),
-				'type' => 'checkbox',
-			),
-
-			// Add Text Field Option
-			array(
-				'default' => __( 'Opt-in to receive exclusive customer communications', 'woo-benchmark-email' ),
-				'desc' => '<br>' . __( 'Checkout form opt-in field label', 'woo-benchmark-email' ),
-				'desc_tip' => __( 'Label for checkout form opt-in checkbox field.', 'woo-benchmark-email' ) . ' '
-					. __( 'Leave this setting blank to eliminate the opt-in field from your checkout form.', 'woo-benchmark-email' ),
-				'id' => 'bmew_checkout_optin_label',
-				'name' => __( 'Checkout Opt-In Field', 'woo-benchmark-email' ),
-				'type' => 'text',
-			),
-
-			// Add API Key Field
-			array(
-				'desc' => '<br>' . __( 'API Key from your Benchmark Email account', 'woo-benchmark-email' ),
-				'desc_tip' => __( 'Log into https://ui.benchmarkemail.com and copy your API key here.', 'woo-benchmark-email' ),
-				'id' => 'bmew_key',
-				'name' => __( 'API Key', 'woo-benchmark-email' ),
-				'type' => 'text',
-			),
-
-			// Add API Key Field
-			array(
-				'desc' => '<br>' . __( 'For temporary use, saves all API communications into WooCommerce > Status > Logs.', 'woo-benchmark-email' ),
-				'desc_tip' => __( "For a nicer logs UI, set `define( 'WC_LOG_HANDLER', 'WC_Log_Handler_DB' );` inside your  `wp-config.php`.", 'woo-benchmark-email' ),
-				'id' => 'bmew_debug',
-				'name' => __( 'Log debug messages?', 'woo-benchmark-email' ),
-				'type' => 'checkbox',
-			),
-
-			// Add API Key Field
-			array(
-				'desc' => '
-					<p>
-						<a id="sync_customers" class="button" href="#">Sync Customers to Benchmark Email</a>
-					</p>
-					<p>
-						<span id="sync_in_progress" style="display:none;">
-							' . sprintf(
-								"<strong>%s</strong> %s",
-								__( 'Please wait.', 'woo-benchmark-email' ),
-								__( 'Syncing at 10 orders per page, completed pages...', 'woo-benchmark-email' )
-							) . '
-						</span>
-						<span id="sync_progress_bar"></span>
-						<span id="sync_complete" style="display:none;">
-							' . __( 'Finished Customer Sync.', 'woo-benchmark-email' ) . '
-						</span>
-					</p>
-				',
-				'desc_tip' => __( 'This will sync all historic customers to Benchmark Email.', 'woo-benchmark-email' ),
-				'id' => 'bmew_sync',
-				'name' => __( 'Sync historic customers', 'woo-benchmark-email' ),
-				'type' => 'checkbox',
-			),
-
-			// End Section
-			array( 'id' => 'bmew', 'type' => 'sectionend' ),
-		);
+	// Load Settings API Class
+	static function woocommerce_get_settings_pages( $settings ) {
+		$settings[] = include( 'class.wc-settings.php' );
+		return $settings;
 	}
 
 	// AJAX Load Script
 	static function admin_enqueue_scripts() {
-		wp_enqueue_script( 'bmew_admin', plugin_dir_url( __FILE__ ) . 'admin.js', array( 'jquery' ), null );
+		wp_enqueue_script( 'bmew_admin', plugin_dir_url( __FILE__ ) . 'admin.js', [ 'jquery' ], null );
 	}
 
 	// Customer Sync AJAX Submit
@@ -237,7 +144,7 @@ class bmew_admin {
 
 		// Query Orders Not Already Sync'd
 		$page = empty( $_POST['page'] ) ? 1 : intval( $_POST['page'] );
-		$args = array(
+		$args = [
 			'limit' => 10,
 			'meta_compare' => 'NOT EXISTS',
 			'meta_key' => '_bmew_syncd',
@@ -245,7 +152,7 @@ class bmew_admin {
 			'orderby' => 'ID',
 			'page' => $page,
 			'return' => 'ids',
-		);
+		];
 		$query = new WC_Order_Query( $args );
 		$orders = $query->get_orders();
 
@@ -265,7 +172,7 @@ class bmew_admin {
 			$products = bmew_frontend::get_products( $_order );
 
 			// Add Contact To List
-			$args = array(
+			$args = [
 				'first' => get_post_meta( $order_id, '_billing_first_name', true ),
 				'last' => get_post_meta( $order_id, '_billing_last_name', true ),
 				'product1' => isset( $products[0] ) ? $products[0] : '',
@@ -295,7 +202,7 @@ class bmew_admin {
 				's_state' => get_post_meta( $order_id, '_shipping_state', true ),
 				's_zip' => get_post_meta( $order_id, '_shipping_postcode', true ),
 				's_country' => get_post_meta( $order_id, '_shipping_country', true ),
-			);
+			];
 			$response = bmew_api::add_contact( $listID, $email, $args );
 
 			// If Successful, Mark Order As Sync'd
