@@ -271,7 +271,7 @@ class bmew_frontend {
 			'company' => get_post_meta( $order_id, '_billing_company', true ),
 			'b_address' => sprintf(
 				'%s %s',
-				get_post_meta( $order_id, '_billing_address_1', true )
+				get_post_meta( $order_id, '_billing_address_1', true ),
 				get_post_meta( $order_id, '_billing_address_2', true )
 			),
 			'b_city' => get_post_meta( $order_id, '_billing_city', true ),
@@ -280,7 +280,7 @@ class bmew_frontend {
 			'b_country' => get_post_meta( $order_id, '_billing_country', true ),
 			's_address' => sprintf(
 				'%s %s',
-				get_post_meta( $order_id, '_shipping_address_1', true )
+				get_post_meta( $order_id, '_shipping_address_1', true ),
 				get_post_meta( $order_id, '_shipping_address_2', true )
 			),
 			's_city' => get_post_meta( $order_id, '_shipping_city', true ),
