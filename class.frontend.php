@@ -7,10 +7,10 @@ if( ! defined( 'ABSPATH' ) ) { exit; }
 class bmew_frontend {
 
 	// Class Properties
-	static $list_names = array(
+	static $list_names = [
 		'abandons' => 'WooCommerce Abandoned Carts',
 		'customers' => 'WooCommerce Customers',
-	);
+	];
 
 	// Load Translations
 	static function plugins_loaded() {
@@ -20,8 +20,8 @@ class bmew_frontend {
 	// AJAX Load Script
 	static function wp_enqueue_scripts() {
 		if( ! function_exists( 'is_checkout' ) || ! is_checkout() ) { return; }
-		wp_enqueue_script( 'bmew_frontend', plugin_dir_url( __FILE__ ) . 'frontend.js', array( 'jquery' ), null );
-		wp_localize_script( 'bmew_frontend', 'bmew_ajax_object', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
+		wp_enqueue_script( 'bmew_frontend', plugin_dir_url( __FILE__ ) . 'frontend.js', [ 'jquery' ], null );
+		wp_localize_script( 'bmew_frontend', 'bmew_ajax_object', [ 'ajax_url' => admin_url( 'admin-ajax.php' ) ] );
 	}
 
 	// Initialize Contact Lists
@@ -42,7 +42,7 @@ class bmew_frontend {
 		}
 
 		// Not Already Set-Up
-		if( ! is_array( $lists ) ) { $lists = array(); }
+		if( ! is_array( $lists ) ) { $lists = []; }
 
 		// Register Vendor With API Key
 		if( empty( $lists[$key]['handshake'] ) ) {
@@ -119,7 +119,7 @@ class bmew_frontend {
 		$products = bmew_frontend::get_products();
 
 		// Add Contact To List
-		$args = array(
+		$args = [
 			'first' => isset( $_POST['billing_first_name'] ) ? sanitize_text_field( $_POST['billing_first_name'] ) : '',
 			'last' => isset( $_POST['billing_last_name'] ) ? sanitize_text_field( $_POST['billing_last_name'] ) : '',
 			'product1' => isset( $products[0] ) ? $products[0] : '',
@@ -127,7 +127,7 @@ class bmew_frontend {
 			'product3' => isset( $products[2] ) ? $products[2] : '',
 			'total' => get_woocommerce_currency_symbol() . $woocommerce->cart->total,
 			'url' => wc_get_cart_url(),
-		);
+		];
 		$response = bmew_api::add_contact( $listID, $email, $args );
 
 		// Output Result And Exit
@@ -156,7 +156,7 @@ class bmew_frontend {
 		$products = bmew_frontend::get_products();
 
 		// Add Contact To List
-		$args = array(
+		$args = [
 			'first' => isset( $_POST['billing_first_name'] ) ? sanitize_text_field( $_POST['billing_first_name'] ) : '',
 			'last' => isset( $_POST['billing_last_name'] ) ? sanitize_text_field( $_POST['billing_last_name'] ) : '',
 			'product1' => isset( $products[0] ) ? $products[0] : '',
@@ -164,7 +164,7 @@ class bmew_frontend {
 			'product3' => isset( $products[2] ) ? $products[2] : '',
 			'total' => get_woocommerce_currency_symbol() . $woocommerce->cart->total,
 			'url' => wc_get_cart_url(),
-		);
+		];
 		$response = bmew_api::add_contact( $listID, $email, $args );
 	}
 
@@ -183,7 +183,7 @@ class bmew_frontend {
 		}
 
 		// Loop Order Items
-		$products = array();
+		$products = [];
 		foreach( $items as $item ) {
 			$_product = wc_get_product( $item['product_id'] );
 			$products[] = $_product->get_title()
@@ -210,14 +210,14 @@ class bmew_frontend {
 		$priority = $bmew_checkout_reorder == 'yes' ? 22 : 122;
 
 		// Add Opt-In Form Field
-		$fields['billing']['bmew_subscribe'] = array(
-			'class' => array( 'form-row-wide' ),
+		$fields['billing']['bmew_subscribe'] = [
+			'class' => [ 'form-row-wide' ],
 			'default' => true,
 			'label' => $bmew_checkout_optin_label,
 			'priority' => $priority,
 			'required' => false,
 			'type' => 'checkbox',
-    	);
+    	];
 
     	// Return Data
 		return $fields;
@@ -257,7 +257,7 @@ class bmew_frontend {
 		$products = bmew_frontend::get_products( $_order );
 
 		// Add Contact To List
-		$args = array(
+		$args = [
 			'first' => isset( $_POST['billing_first_name'] ) ? sanitize_text_field( $_POST['billing_first_name'] ) : '',
 			'last' => isset( $_POST['billing_last_name'] ) ? sanitize_text_field( $_POST['billing_last_name'] ) : '',
 			'product1' => isset( $products[0] ) ? $products[0] : '',
@@ -287,7 +287,7 @@ class bmew_frontend {
 			's_state' => get_post_meta( $order_id, '_shipping_state', true ),
 			's_zip' => get_post_meta( $order_id, '_shipping_postcode', true ),
 			's_country' => get_post_meta( $order_id, '_shipping_country', true ),
-		);
+		];
 		bmew_api::add_contact( $listID, $email, $args );
 	}
 

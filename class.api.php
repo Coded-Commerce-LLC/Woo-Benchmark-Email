@@ -10,18 +10,18 @@ class bmew_api {
 	static $url = 'https://clientapi.benchmarkemail.com/';
 
 	// Adds a Contact To a List
-	static function add_contact( $listID, $email, $args = array() ) {
+	static function add_contact( $listID, $email, $args = [] ) {
 		extract( $args );
 
 		// Build Body
-		$body = array(
-			'Data' => array(
+		$body = [
+			'Data' => [
 				'Email' => $email,
 				'EmailPerm' => 1,
 				'Field19' => current_time( 'm/d/Y' ),
 				'IPAddress' => bmew_api::get_client_ip(),
-			),
-		);
+			],
+		];
 		if( isset( $first ) ) { $body['Data']['FirstName'] = $first; }
 		if( isset( $last ) ) { $body['Data']['LastName'] = $last; }
 		if( isset( $product1 ) ) { $body['Data']['Field21'] = $product1; }
@@ -76,7 +76,7 @@ class bmew_api {
 
 	// Deletes a Contact
 	static function delete_contact( $listID, $contactID ) {
-		$body = array( 'ContactID' => $contactID, 'ListID' => $listID );
+		$body = [ 'ContactID' => $contactID, 'ListID' => $listID ];
 		return bmew_api::benchmark_query( 'Contact/ContactDetails', 'DELETE', $body );
 	}
 
@@ -93,7 +93,7 @@ class bmew_api {
 
 	// Adds a Contact List
 	static function add_list( $name ) {
-		$body = array( 'Data' => array( 'Description' => $name, 'Name' => $name ) );
+		$body = [ 'Data' => [ 'Description' => $name, 'Name' => $name ] ];
 		$response = bmew_api::benchmark_query( 'Contact', 'POST', $body );
 		return empty( $response->ID ) ? $response : intval( $response->ID );
 	}
@@ -127,7 +127,7 @@ class bmew_api {
 	// Vendor Handshake
 	static function update_partner() {
 		$uri = 'Client/Partner';
-		$body = array( 'PartnerLogin' => 'beautomated' );
+		$body = [ 'PartnerLogin' => 'beautomated' ];
 		$response = bmew_api::benchmark_query( $uri, 'POST', $body );
 	}
 
@@ -137,8 +137,8 @@ class bmew_api {
 		// Organize Request
 		if( $body ) { $body = json_encode( $body ); }
 		$key = get_option( 'bmew_key' );
-		$headers = array( 'AuthToken' => $key, 'Content-Type' => 'application/json' );
-		$args = array( 'body' => $body, 'headers' => $headers, 'method' => $method );
+		$headers = [ 'AuthToken' => $key, 'Content-Type' => 'application/json' ];
+		$args = [ 'body' => $body, 'headers' => $headers, 'method' => $method ];
 		$url = bmew_api::$url . $uri;
 
 		// Perform And Log Transmission
@@ -159,7 +159,7 @@ class bmew_api {
 		$bmew_debug = get_option( 'bmew_debug' );
 		if( ! $bmew_debug ) { return; }
 		$logger = wc_get_logger();
-		$context = array( 'source' => 'woo-benchmark-email' );
+		$context = [ 'source' => 'woo-benchmark-email' ];
 		$request = print_r( $request, true );
 		$response = print_r( $response, true );
 		$logger->info( "==URL== " . $url, $context );
@@ -173,7 +173,7 @@ class bmew_api {
 		$url = 'https://api.benchmarkemail.com/1.3/';
 		$client = new IXR_Client( $url, false, 443, 15 );
 		$args = func_get_args();
-		call_user_func_array( array( $client, 'query' ), $args );
+		call_user_func_array( [ $client, 'query' ], $args );
 		$response = $client->getResponse();
 		bmew_api::logger( $url, $args, $response );
 		return $response;
