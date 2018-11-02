@@ -165,7 +165,7 @@ class bmew_frontend {
 			'total' => get_woocommerce_currency_symbol() . $woocommerce->cart->total,
 			'url' => wc_get_cart_url(),
 		];
-		$response = bmew_api::add_contact( $listID, $email, $args );
+		bmew_api::add_contact( $listID, $email, $args );
 	}
 
 	// Get Cart Details - Helper Function
@@ -296,6 +296,9 @@ class bmew_frontend {
 
 		// Load Lists, If Not Already Loaded
 		$lists = bmew_api::get_lists();
+
+		// Handle Error Retrieving Lists
+		if( ! is_array( $lists ) ) { return false; }
 
 		// Loop Contact Lists
 		foreach( $lists as $list ) {
