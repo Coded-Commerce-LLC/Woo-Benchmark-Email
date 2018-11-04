@@ -6,16 +6,19 @@ if( ! defined( 'ABSPATH' ) ) { exit; }
 // Front End Plugin Logic
 class bmew_frontend {
 
+
 	// Class Properties
 	static $list_names = [
 		'abandons' => 'WooCommerce Abandoned Carts',
 		'customers' => 'WooCommerce Customers',
 	];
 
+
 	// Load Translations
 	static function plugins_loaded() {
 		load_plugin_textdomain( 'woo-benchmark-email', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 	}
+
 
 	// AJAX Load Script
 	static function wp_enqueue_scripts() {
@@ -23,6 +26,7 @@ class bmew_frontend {
 		wp_enqueue_script( 'bmew_frontend', plugin_dir_url( __FILE__ ) . 'frontend.js', [ 'jquery' ], null );
 		wp_localize_script( 'bmew_frontend', 'bmew_ajax_object', [ 'ajax_url' => admin_url( 'admin-ajax.php' ) ] );
 	}
+
 
 	// Initialize Contact Lists
 	static function init_contact_lists() {
@@ -65,6 +69,7 @@ class bmew_frontend {
 		update_option( 'bmew_lists', $lists );
 	}
 
+
 	// Add To Cart Redirects To Checkout
 	static function woocommerce_add_to_cart_redirect( $wc_cart_url ) {
 		global $woocommerce;
@@ -72,6 +77,7 @@ class bmew_frontend {
 		if( $bmew_skip_cart != 'yes' ) { return $wc_cart_url; }
 		return wc_get_checkout_url();
 	}
+
 
 	// Reorder Checkout Contact Fields
 	static function woocommerce_billing_fields( $fields ) {
@@ -81,6 +87,7 @@ class bmew_frontend {
 		$fields['billing_phone']['priority'] = 29;
 		return $fields;
 	}
+
 
 	// AJAX Routing
 	static function wp_ajax__bmew_action() {
@@ -98,6 +105,7 @@ class bmew_frontend {
 			return bmew_frontend::wp_ajax__bmew_action__abandoned_cart();
 		}
 	}
+
 
 	// Checkout Form AJAX - Capture Abandons
 	static function wp_ajax__bmew_action__abandoned_cart() {
@@ -135,6 +143,7 @@ class bmew_frontend {
 		wp_die();
 	}
 
+
 	// Hooked Into Woo Add To Cart - Capture Abandons
 	static function woocommerce_add_to_cart() {
 		global $woocommerce;
@@ -142,6 +151,8 @@ class bmew_frontend {
 		// Logged In Users Or Previous Woo Sessions Only
 		$session_customer = $woocommerce->session->get( 'customer' );
 		$email = isset( $session_customer[ 'email' ] ) ? $session_customer[ 'email' ] : '';
+		$last_name = isset( $session_customer[ 'last_name' ] ) ? $session_customer[ 'last_name' ] : '';
+		$first_name = isset( $session_customer[ 'first_name' ] ) ? $session_customer[ 'first_name' ] : '';
 
 		// Skip If No Email Provided
 		if( ! $email ) { return; }
@@ -157,8 +168,8 @@ class bmew_frontend {
 
 		// Add Contact To List
 		$args = [
-			'first' => isset( $_POST['billing_first_name'] ) ? sanitize_text_field( $_POST['billing_first_name'] ) : '',
-			'last' => isset( $_POST['billing_last_name'] ) ? sanitize_text_field( $_POST['billing_last_name'] ) : '',
+			'first' => $first_name,
+			'last' => $last_name,
 			'product1' => isset( $products[0] ) ? $products[0] : '',
 			'product2' => isset( $products[1] ) ? $products[1] : '',
 			'product3' => isset( $products[2] ) ? $products[2] : '',
@@ -168,33 +179,6 @@ class bmew_frontend {
 		bmew_api::add_contact( $listID, $email, $args );
 	}
 
-	// Get Cart Details - Helper Function
-	static function get_products( $_order = false ) {
-
-		// Using Order Object
-		if( $_order ) {
-			$items = $_order->get_items();
-		}
-
-		// Using Cart Session
-		else {
-			global $woocommerce;
-			$items = $woocommerce->cart->get_cart();
-		}
-
-		// Loop Order Items
-		$products = [];
-		foreach( $items as $item ) {
-			$_product = wc_get_product( $item['product_id'] );
-			$products[] = $_product->get_title()
-				. ', quantity ' . $item['quantity']
-				. ', price ' . get_woocommerce_currency_symbol()
-				. get_post_meta( $item['product_id'] , '_price', true );
-		}
-
-		// Return Products
-		return $products;
-	}
 
 	// Filter WooCommerce Checkout Fields - Moves Email Field Up
 	static function woocommerce_checkout_fields( $fields ) {
@@ -223,6 +207,7 @@ class bmew_frontend {
 		return $fields;
 	}
 
+
 	// At Order Creation - Save Custom Checkout Fields
 	static function woocommerce_checkout_update_order_meta( $order_id ) {
 
@@ -250,25 +235,68 @@ class bmew_frontend {
 		// Save Subscription Action To Order
 		update_post_meta( $order_id, '_bmew_subscribed', 'yes' );
 
-		// Get Order Record
+		// Get Order Details
+		$args = bmew_frontend::get_order_details( $order_id );
+
+		// Add Contact To List
+		bmew_api::add_contact( $listID, $email, $args );
+	}
+
+
+	// Get Cart Details - Helper Function
+	static function get_products( $order_id = false ) {
+
+		// Using Order Object
+		if( $order_id ) {
+			$_order = wc_get_order( $order_id );
+			$items = $_order->get_items();
+		}
+
+		// Using Cart Session
+		else {
+			global $woocommerce;
+			$items = $woocommerce->cart->get_cart();
+		}
+
+		// Loop Order Items
+		$products = [];
+		foreach( $items as $item ) {
+			$_product = wc_get_product( $item['product_id'] );
+			$products[] = $_product->get_title()
+				. ', quantity ' . $item['quantity']
+				. ', price ' . get_woocommerce_currency_symbol()
+				. get_post_meta( $item['product_id'] , '_price', true );
+		}
+
+		// Return Products
+		return $products;
+	}
+
+
+	// Get Order Details - Helper Function
+	static function get_order_details( $order_id ) {
+
+		// Get Order Object
 		$_order = wc_get_order( $order_id );
 
 		// Get Cart Items
-		$products = bmew_frontend::get_products( $_order );
+		$products = bmew_frontend::get_products( $order_id );
 
-		// Add Contact To List
-		$args = [
-			'first' => isset( $_POST['billing_first_name'] ) ? sanitize_text_field( $_POST['billing_first_name'] ) : '',
-			'last' => isset( $_POST['billing_last_name'] ) ? sanitize_text_field( $_POST['billing_last_name'] ) : '',
+		// Output
+		return [
+
+			// Order Details
+			'company' => get_post_meta( $order_id, '_billing_company', true ),
+			'first' => get_post_meta( $order_id, '_billing_first_name', true ),
+			'last' => get_post_meta( $order_id, '_billing_last_name', true ),
+			'phone' => get_post_meta( $order_id, '_billing_phone', true ),
 			'product1' => isset( $products[0] ) ? $products[0] : '',
 			'product2' => isset( $products[1] ) ? $products[1] : '',
 			'product3' => isset( $products[2] ) ? $products[2] : '',
 			'total' => get_woocommerce_currency_symbol() . $_order->get_total(),
 			'url' => $_order->get_view_order_url(),
 
-			// Order Details
-			'phone' => get_post_meta( $order_id, '_billing_phone', true ),
-			'company' => get_post_meta( $order_id, '_billing_company', true ),
+			// Billing Address
 			'b_address' => sprintf(
 				'%s %s',
 				get_post_meta( $order_id, '_billing_address_1', true ),
@@ -278,6 +306,8 @@ class bmew_frontend {
 			'b_state' => get_post_meta( $order_id, '_billing_state', true ),
 			'b_zip' => get_post_meta( $order_id, '_billing_postcode', true ),
 			'b_country' => get_post_meta( $order_id, '_billing_country', true ),
+
+			// Shipping Address
 			's_address' => sprintf(
 				'%s %s',
 				get_post_meta( $order_id, '_shipping_address_1', true ),
@@ -288,8 +318,8 @@ class bmew_frontend {
 			's_zip' => get_post_meta( $order_id, '_shipping_postcode', true ),
 			's_country' => get_post_meta( $order_id, '_shipping_country', true ),
 		];
-		bmew_api::add_contact( $listID, $email, $args );
 	}
+
 
 	// Match a Contact List - Helper Function
 	static function match_list( $list_slug ) {

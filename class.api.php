@@ -22,17 +22,17 @@ class bmew_api {
 				'IPAddress' => bmew_api::get_client_ip(),
 			],
 		];
+
+		// Order Details
+		if( isset( $company ) ) { $body['Data']['Field9'] = $company; }
 		if( isset( $first ) ) { $body['Data']['FirstName'] = $first; }
 		if( isset( $last ) ) { $body['Data']['LastName'] = $last; }
+		if( isset( $phone ) ) { $body['Data']['Field6'] = $phone; }
 		if( isset( $product1 ) ) { $body['Data']['Field21'] = $product1; }
 		if( isset( $product2 ) ) { $body['Data']['Field22'] = $product2; }
 		if( isset( $product3 ) ) { $body['Data']['Field23'] = $product3; }
 		if( isset( $total ) ) { $body['Data']['Field24'] = $total; }
 		if( isset( $url ) ) { $body['Data']['Field18'] = $url; }
-
-		// Order Details
-		if( isset( $phone ) ) { $body['Data']['Field6'] = $phone; }
-		if( isset( $company ) ) { $body['Data']['Field9'] = $company; }
 
 		// Billing Address
 		if( isset( $b_address ) ) { $body['Data']['Field1'] = $b_address; }
@@ -48,7 +48,10 @@ class bmew_api {
 		if( isset( $s_zip ) ) { $body['Data']['Field16'] = $s_zip; }
 		if( isset( $s_country ) ) { $body['Data']['Field17'] = $s_country; }
 
-		// Search Existing Records
+		// Order History
+		
+
+		// Search Existing Contacts
 		$matches = bmew_api::find_contact( $email );
 		foreach( $matches as $match ) {
 
@@ -60,7 +63,7 @@ class bmew_api {
 			}
 		}
 
-		// Add Record
+		// Add New Contact
 		$uri = 'Contact/' . $listID . '/ContactDetails';
 		$response = bmew_api::benchmark_query( $uri, 'POST', $body );
 

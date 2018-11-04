@@ -168,41 +168,10 @@ class bmew_admin {
 			// Get Order Record
 			$_order = wc_get_order( $order_id );
 
-			// Get Cart Items
-			$products = bmew_frontend::get_products( $_order );
+			// Get Order Details
+			$args = bmew_frontend::get_order_details( $order_id );
 
 			// Add Contact To List
-			$args = [
-				'first' => get_post_meta( $order_id, '_billing_first_name', true ),
-				'last' => get_post_meta( $order_id, '_billing_last_name', true ),
-				'product1' => isset( $products[0] ) ? $products[0] : '',
-				'product2' => isset( $products[1] ) ? $products[1] : '',
-				'product3' => isset( $products[2] ) ? $products[2] : '',
-				'total' => get_woocommerce_currency_symbol() . $_order->get_total(),
-				'url' => $_order->get_view_order_url(),
-
-				// Order Details
-				'phone' => get_post_meta( $order_id, '_billing_phone', true ),
-				'company' => get_post_meta( $order_id, '_billing_company', true ),
-				'b_address' => sprintf(
-					'%s %s',
-					get_post_meta( $order_id, '_billing_address_1', true ),
-					get_post_meta( $order_id, '_billing_address_2', true )
-				),
-				'b_city' => get_post_meta( $order_id, '_billing_city', true ),
-				'b_state' => get_post_meta( $order_id, '_billing_state', true ),
-				'b_zip' => get_post_meta( $order_id, '_billing_postcode', true ),
-				'b_country' => get_post_meta( $order_id, '_billing_country', true ),
-				's_address' => sprintf(
-					'%s %s',
-					get_post_meta( $order_id, '_shipping_address_1', true ),
-					get_post_meta( $order_id, '_shipping_address_2', true )
-				),
-				's_city' => get_post_meta( $order_id, '_shipping_city', true ),
-				's_state' => get_post_meta( $order_id, '_shipping_state', true ),
-				's_zip' => get_post_meta( $order_id, '_shipping_postcode', true ),
-				's_country' => get_post_meta( $order_id, '_shipping_country', true ),
-			];
 			$response = bmew_api::add_contact( $listID, $email, $args );
 
 			// If Successful, Mark Order As Sync'd
