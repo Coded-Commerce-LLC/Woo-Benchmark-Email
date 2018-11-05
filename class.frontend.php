@@ -236,7 +236,7 @@ class bmew_frontend {
 		update_post_meta( $order_id, '_bmew_subscribed', 'yes' );
 
 		// Get Order Details
-		$args = bmew_frontend::get_order_details( $order_id );
+		$args = bmew_frontend::get_order_details( $order_id, $email );
 
 		// Add Contact To List
 		bmew_api::add_contact( $listID, $email, $args );
@@ -274,13 +274,29 @@ class bmew_frontend {
 
 
 	// Get Order Details - Helper Function
-	static function get_order_details( $order_id ) {
+	static function get_order_details( $order_id, $email ) {
 
 		// Get Order Object
 		$_order = wc_get_order( $order_id );
 
 		// Get Cart Items
 		$products = bmew_frontend::get_products( $order_id );
+
+		// Get Order History
+		$total_spent = 0;
+		$order_timestamps = [];
+		$history = get_posts( [
+			'meta_key' => '_billing_email',
+			'meta_value' => $email,
+			'numberposts' => -1,
+			'post_status' => [ 'wc-processing', 'wc-completed', 'wc-on-hold' ],
+			'post_type' => wc_get_order_types(),
+		] );
+		foreach( $history as $order ) {
+			$total_spent += $order->get_total();
+			$order_date = $order->get_date_created();
+			$order_timestamps[] = $order_date->getTimestamp();
+		}
 
 		// Output
 		return [
@@ -295,6 +311,10 @@ class bmew_frontend {
 			'product3' => isset( $products[2] ) ? $products[2] : '',
 			'total' => get_woocommerce_currency_symbol() . $_order->get_total(),
 			'url' => $_order->get_view_order_url(),
+
+			// Order History
+			'first_order_date' => date( 'c', min( $order_timestamps ) ),
+			'total_spent' => number_format( $total_spent, 2 ),
 
 			// Billing Address
 			'b_address' => sprintf(

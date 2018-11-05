@@ -34,6 +34,10 @@ class bmew_api {
 		if( isset( $total ) ) { $body['Data']['Field24'] = $total; }
 		if( isset( $url ) ) { $body['Data']['Field18'] = $url; }
 
+		// Order History
+		if( isset( $first_order_date ) ) { $body['Data']['Field25'] = $first_order_date; }
+		if( isset( $total_spent ) ) { $body['Data']['Field26'] = $total_spent; }
+
 		// Billing Address
 		if( isset( $b_address ) ) { $body['Data']['Field1'] = $b_address; }
 		if( isset( $b_city ) ) { $body['Data']['Field2'] = $b_city; }
@@ -47,9 +51,6 @@ class bmew_api {
 		if( isset( $s_state ) ) { $body['Data']['Field15'] = $s_state; }
 		if( isset( $s_zip ) ) { $body['Data']['Field16'] = $s_zip; }
 		if( isset( $s_country ) ) { $body['Data']['Field17'] = $s_country; }
-
-		// Order History
-		
 
 		// Search Existing Contacts
 		$matches = bmew_api::find_contact( $email );

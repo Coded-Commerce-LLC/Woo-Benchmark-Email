@@ -11,23 +11,9 @@ class bmew_admin {
 		Admin Messaging
 	**********************/
 
-	// Admin Dashboard Diagnostics Function
+	// Admin Dashboard Notifications
 	static function wp_dashboard_setup() {
-
-
-		/******************
-			Diagnostics
-		******************/
-
 		$message = '';
-		//$message = get_option( 'bmew_lists' );
-		//$message = bmew_api::add_list( 'WooCommerce Test List' );
-		//$message = bmew_api::get_lists();
-		//$message = bmew_frontend::match_list( 'abandons' );
-		//$message = bmew_api::get_contact( ###, ### );
-		//$message = bmew_api::add_contact( ###, 'sean_test01@codedcommerce.com', [ 'first' => 'Test' ] );
-		//$message = bmew_api::delete_contact( ###, ### );
-		//$message = bmew_api::find_contact( 'sean+test01@codedcommerce.com' );
 
 
 		/*********************
@@ -169,7 +155,7 @@ class bmew_admin {
 			$_order = wc_get_order( $order_id );
 
 			// Get Order Details
-			$args = bmew_frontend::get_order_details( $order_id );
+			$args = bmew_frontend::get_order_details( $order_id, $email );
 
 			// Add Contact To List
 			$response = bmew_api::add_contact( $listID, $email, $args );
