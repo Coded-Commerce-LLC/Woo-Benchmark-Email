@@ -98,7 +98,7 @@ class bmew_api {
 	// Adds a Contact List
 	static function add_list( $name ) {
 		$body = [ 'Data' => [ 'Description' => $name, 'Name' => $name ] ];
-		$response = bmew_api::benchmark_query( 'Contact', 'POST', $body );
+		$response = bmew_api::benchmark_query( 'Contact/', 'POST', $body );
 		return empty( $response->ID ) ? $response : intval( $response->ID );
 	}
 
@@ -125,7 +125,7 @@ class bmew_api {
 
 	// Get All Contact Lists
 	static function get_lists() {
-		return bmew_api::benchmark_query( 'Contact' );
+		return bmew_api::benchmark_query( 'Contact/' );
 	}
 
 	// Vendor Handshake
