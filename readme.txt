@@ -1,11 +1,11 @@
 === Woo Benchmark Email ===
 Contributors: seanconklin, randywsandberg
 Donate link: https://codedcommerce.com/donate
-Tags: abandoned cart, customer newsletters, marketing automation, Benchmark Email, WooCommerce
+Tags: WooCommerce, Abandoned cart, Drip campaigns, Email marketing automation, Benchmark Email
 Requires at least: 4.0.1
 Tested up to: 5.0
 Requires PHP: 5.6
-Stable tag: 1.0
+Stable tag: 1.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -42,18 +42,26 @@ Feature: Sync all order history to Woo Customers list
 == Installation ==
 
 1. Upload the plugin files to the `/wp-content/plugins/woo-benchmark-email` directory, or install the plugin through the WordPress plugins screen directly.
-1. Activate the plugin through the 'Plugins' screen in WordPress
-1. Use the `WooCommerce->Settings->Advanced->Benchmark Email` screen to configure the plugin
+1. Activate the plugin through the 'Plugins' screen in WordPress.
+1. Use the `WooCommerce->Settings->Advanced->Benchmark Email` screen to configure the plugin.
 
 == Screenshots ==
 
-1. The settings panel where you place your API key
-2. A sample user completing checkout showing the data being captured behind the scenes as viewed from the inspector
+1. The settings panel where you place your API key.
+2. A sample user completing checkout showing the data being captured behind the scenes as viewed from the inspector.
 
 == Changelog ==
 
-= 1.1 on 2018-11-01 =
-* Added sister product activation and installation checks and message
+= 1.1 on 2018-11-06 =
+* Added: Sister product activation and installation checks and message with dismiss link.
+* Added: New fields for total spent, first order date, total number of orders to CustomerSync and order placement.
+* Added: Order placement or CustomerSync to include addresses, company name, and phone number fields.
+* Update: Moved Benchmark Email menu from underneath Advanced to WooCommerce Settings top level and utilized Settings API class reference.
+* Update: Code consolidation.
+* Update: Shortened some array syntax.
+* Fixed: Contact lists query - needed trailing slash for REST API.
+* Fixed: Add to cart authenticated - first and last name detection.
+* Fixed: PHP Warning if no contact lists are found on an account.
 
 = 1.0 on 2018-09-23 =
 * Initial release
@@ -61,10 +69,10 @@ Feature: Sync all order history to Woo Customers list
 == Upgrade Notice ==
 
 = 1.1 =
-* Minor update
+* Features and bug fixes.
 
 = 1.0 =
-* Initial release
+* Initial release.
 
 == Support ==
 
