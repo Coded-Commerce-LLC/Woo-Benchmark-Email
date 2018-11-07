@@ -37,6 +37,7 @@ class bmew_api {
 		// Order History
 		if( isset( $first_order_date ) ) { $body['Data']['Field25'] = $first_order_date; }
 		if( isset( $total_spent ) ) { $body['Data']['Field26'] = $total_spent; }
+		if( isset( $total_orders ) ) { $body['Data']['Field27'] = $total_orders; }
 
 		// Billing Address
 		if( isset( $b_address ) ) { $body['Data']['Field1'] = $b_address; }

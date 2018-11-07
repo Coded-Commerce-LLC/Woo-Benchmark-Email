@@ -285,17 +285,20 @@ class bmew_frontend {
 		// Get Order History
 		$total_spent = 0;
 		$order_timestamps = [];
-		$history = get_posts( [
+		$order_history = get_posts( [
 			'meta_key' => '_billing_email',
 			'meta_value' => $email,
 			'numberposts' => -1,
 			'post_status' => [ 'wc-processing', 'wc-completed', 'wc-on-hold' ],
 			'post_type' => wc_get_order_types(),
 		] );
-		foreach( $history as $order ) {
-			$total_spent += $order->get_total();
-			$order_date = $order->get_date_created();
-			$order_timestamps[] = $order_date->getTimestamp();
+		if( is_array( $order_history ) ) {
+			foreach( $order_history as $post ) {
+				$order_historic = wc_get_order( $post->ID );
+				$total_spent += $order_historic->get_total();
+				$order_date = $order_historic->get_date_created();
+				$order_timestamps[] = $order_date->getTimestamp();
+			}
 		}
 
 		// Output
@@ -315,6 +318,7 @@ class bmew_frontend {
 			// Order History
 			'first_order_date' => date( 'c', min( $order_timestamps ) ),
 			'total_spent' => number_format( $total_spent, 2 ),
+			'total_orders' => sizeof( $order_history ),
 
 			// Billing Address
 			'b_address' => sprintf(
