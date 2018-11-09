@@ -20,7 +20,7 @@ class WC_Settings_BMEW extends WC_Settings_Page {
 			// Add Section Title
 			[ 'desc' => '', 'id' => 'bmew_title', 'name' => 'Benchmark Email', 'type' => 'title' ],
 
-			// Add API Key Field
+			// Add Skip Cart Field
 			[
 				'desc' => '<br>' . __( 'Skips the cart step and redirects customers to the checkout form that conveniently displays a mini cart.', 'woo-benchmark-email' )
 					. '<br>' . __( "If they need to edit their cart, they will have to click on your theme's cart link in order to do so.", 'woo-benchmark-email' ),
@@ -30,7 +30,7 @@ class WC_Settings_BMEW extends WC_Settings_Page {
 				'type' => 'checkbox',
 			],
 
-			// Add API Key Field
+			// Add Move Email Field
 			[
 				'desc' => '<br>' . __( 'Moves the email address and phone number fields up and underneath the name fields.', 'woo-benchmark-email' ),
 				'desc_tip' => __( 'This may improve the chances of the email address being provided by customers and thus available to abandoned cart offers.', 'woo-benchmark-email' ),
@@ -39,7 +39,7 @@ class WC_Settings_BMEW extends WC_Settings_Page {
 				'type' => 'checkbox',
 			],
 
-			// Add Text Field Option
+			// Add Optin Toggle Field
 			[
 				'default' => __( 'Opt-in to receive exclusive customer communications', 'woo-benchmark-email' ),
 				'desc' => '<br>' . __( 'Checkout form opt-in field label', 'woo-benchmark-email' ),
@@ -59,7 +59,7 @@ class WC_Settings_BMEW extends WC_Settings_Page {
 				'type' => 'text',
 			],
 
-			// Add API Key Field
+			// Add Debug Toggle Field
 			[
 				'desc' => '<br>' . __( 'For temporary use, saves all API communications into WooCommerce > Status > Logs.', 'woo-benchmark-email' ),
 				'desc_tip' => __( "For a nicer logs UI, set `define( 'WC_LOG_HANDLER', 'WC_Log_Handler_DB' );` inside your  `wp-config.php`.", 'woo-benchmark-email' ),
@@ -68,7 +68,7 @@ class WC_Settings_BMEW extends WC_Settings_Page {
 				'type' => 'checkbox',
 			],
 
-			// Add API Key Field
+			// Add Sync Customers Field
 			[
 				'desc' => '
 					<p>
@@ -94,7 +94,7 @@ class WC_Settings_BMEW extends WC_Settings_Page {
 				'type' => 'checkbox',
 			],
 
-			// End Section
+			// End Settings Section
 			[ 'id' => 'bmew_sectionend', 'type' => 'sectionend' ],
 		] );
 	}
