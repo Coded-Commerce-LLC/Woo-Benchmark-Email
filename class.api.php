@@ -136,12 +136,26 @@ class bmew_api {
 		$response = bmew_api::benchmark_query( $uri, 'POST', $body );
 	}
 
+	// Gets Temporary Token And API Key From User / Pass
+	static function get_api_key( $user, $pass ) {
+
+		// Get Temporary Token From User / Pass
+		$body = [ 'Username' => $user, 'Password' => $pass ];
+		$response = bmew_api::benchmark_query( 'Client/Authenticate', 'POST', $body );
+		if( ! isset( $response->Response->Token ) ) { return false; }
+
+		// Use Temporary Token To Get API Key
+		$key = $response->Response->Token;
+		$response = bmew_api::benchmark_query( 'Client/Setting', 'GET', null, $key );
+		return isset( $response->Response->Token ) ? $response->Response->Token : false;
+	}
+
 	// Talk To Benchmark ReST API
-	static function benchmark_query( $uri = '', $method = 'GET', $body = null ) {
+	static function benchmark_query( $uri = '', $method = 'GET', $body = null, $key = null ) {
 
 		// Organize Request
 		if( $body ) { $body = json_encode( $body ); }
-		$key = get_option( 'bmew_key' );
+		$key = $key ? $key : get_option( 'bmew_key' );
 		$headers = [ 'AuthToken' => $key, 'Content-Type' => 'application/json' ];
 		$args = [ 'body' => $body, 'headers' => $headers, 'method' => $method ];
 		$url = bmew_api::$url . $uri;

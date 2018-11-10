@@ -92,18 +92,27 @@ class bmew_frontend {
 	// AJAX Routing
 	static function wp_ajax__bmew_action() {
 
-		// Verify Action Is Requested
+		// Sync Action Is Requested
 		if( empty( $_POST['sync'] ) ) { return; }
+		switch( $_POST['sync'] ) {
 
-		// Back End Routing
-		if( $_POST['sync'] == 'sync_customers' ) {
-			bmew_admin::wp_ajax__bmew_action__sync_customers();
+			// API Key
+			case 'get_api_key':
+				if( empty( $_POST['user'] ) || empty( $_POST['pass'] ) ) { return; }
+				echo bmew_api::get_api_key( $_POST['user'], $_POST['pass'] );
+				wp_die();
+
+			// Customer Sync
+			case 'sync_customers':
+				echo bmew_admin::wp_ajax__bmew_action__sync_customers();
+				wp_die();
+
+			// Abandoned Cart
+			case 'abandoned_cart':
+				echo bmew_frontend::wp_ajax__bmew_action__abandoned_cart();
+				wp_die();
 		}
 
-		// Front End Routing
-		else if( $_POST['sync'] == 'abandoned_cart' ) {
-			return bmew_frontend::wp_ajax__bmew_action__abandoned_cart();
-		}
 	}
 
 
@@ -137,10 +146,6 @@ class bmew_frontend {
 			'url' => wc_get_cart_url(),
 		];
 		$response = bmew_api::add_contact( $listID, $email, $args );
-
-		// Output Result And Exit
-		print_r( $response );
-		wp_die();
 	}
 
 

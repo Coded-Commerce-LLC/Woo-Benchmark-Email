@@ -2,7 +2,7 @@
 // Track Last Page
 var bmew_page = 1;
 
-// On Button Click
+// DOM Loaded
 jQuery( document ).ready( function( $ ) {
 
 	// Hide On Page Load
@@ -10,19 +10,41 @@ jQuery( document ).ready( function( $ ) {
 	$( 'span#sync_complete' ).hide();
 	$( 'span#sync_in_progress' ).hide();
 
-	// Handle Sync Request
+	// Handle API Key Click
+	$( 'a#get_api_key' ).click( function() {
+		var user = prompt(
+			"Please enter your Benchmark Email username", ''
+		);
+		var pass = prompt(
+			"Please enter your Benchmark Email password", ''
+		);
+		var data = {
+			'action': 'bmew_action',
+			'sync': 'get_api_key',
+			'user': user,
+			'pass': pass
+		};
+		$( 'input#bmew_key' ).val( 'Loading...' );
+		$.post( ajaxurl, data, function( response ) {
+			if( response != '' ) {
+				$( 'input#bmew_key' ).val( response );
+			}
+		} );
+	} );
+
+	// Handle Sync Click
 	$( 'a#sync_customers' ).click( function() {
 		$( 'span#sync_complete' ).hide();
 		$( 'span#sync_progress_bar' ).empty();
 		$( 'span#sync_in_progress' ).show();
 		bmew_page = 1;
-		bmew_query( $ );
+		bmew_sync_query( $ );
 		return false;
 	} );
 } );
 
-// AJAX Caller
-function bmew_query( $ ) {
+// Customer Sync AJAX
+function bmew_sync_query( $ ) {
 	var data = {
 		'action': 'bmew_action',
 		'sync': 'sync_customers',
@@ -43,6 +65,6 @@ function bmew_query( $ ) {
 
 		// Advance
 		bmew_page ++;
-		bmew_query( $ );
+		bmew_sync_query( $ );
 	} );
 }

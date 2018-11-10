@@ -52,7 +52,11 @@ class WC_Settings_BMEW extends WC_Settings_Page {
 
 			// Add API Key Field
 			[
-				'desc' => '<br>' . __( 'API Key from your Benchmark Email account', 'woo-benchmark-email' ),
+				'desc' => sprintf(
+					'<a id="get_api_key" class="button" href="#">%s</a><br />%s',
+					__( 'Get API Key', 'woo-benchmark-email' ),
+					__( 'API Key from your Benchmark Email account', 'woo-benchmark-email' )
+				),
 				'desc_tip' => __( 'Log into https://ui.benchmarkemail.com and copy your API key here.', 'woo-benchmark-email' ),
 				'id' => 'bmew_key',
 				'name' => __( 'API Key', 'woo-benchmark-email' ),

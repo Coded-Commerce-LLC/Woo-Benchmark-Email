@@ -169,8 +169,7 @@ class bmew_admin {
 		// Handle Finish
 		if( ! $orders ) { $page = 0; }
 
-		// Exit With Progress Level
-		echo $page;
-		wp_die();
+		// Return
+		return $page;
 	}
 }
