@@ -99,7 +99,8 @@ class bmew_frontend {
 			// API Key
 			case 'get_api_key':
 				if( empty( $_POST['user'] ) || empty( $_POST['pass'] ) ) { return; }
-				echo bmew_api::get_api_key( $_POST['user'], $_POST['pass'] );
+				$response = bmew_api::get_api_key( $_POST['user'], $_POST['pass'] );
+				echo $response ? $response : __( 'Error - Please try again', 'woo-benchmark-email' );
 				wp_die();
 
 			// Customer Sync
