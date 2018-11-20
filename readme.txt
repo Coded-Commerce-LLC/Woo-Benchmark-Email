@@ -13,7 +13,7 @@ Connects WooCommerce with Benchmark Email - syncing customers and abandoned cart
 
 == Description ==
 
-[youtube https://www.youtube.com/watch?v=c0BGIXT8xMk]
+[youtube https://www.youtube.com/watch?v=MPROuswLJDs]
 
 Feature: Connect to Benchmark Email ReST API
 * Separate from optional Benchmark Email Lite plugin, this setting connects to one API key for WooCommerce specific communications.
