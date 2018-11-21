@@ -44,7 +44,7 @@ class bmew_admin {
 			if( file_exists( WP_PLUGIN_DIR . '/benchmark-email-lite/benchmark-email-lite.php' ) ) {
 				$messages[] = sprintf(
 					'
-						%s &nbsp; <strong style="font-size:1.25em;"><a href="%s">%s</a></strong>
+						%s &nbsp; <strong style="font-size:1.2em;"><a href="%s">%s</a></strong>
 						<a style="float:right;" href="%s">%s</a>
 					',
 					__( 'Activate our sister product Benchmark Email Lite to view campaign statistics.', 'woo-benchmark-email' ),
@@ -58,7 +58,7 @@ class bmew_admin {
 			} else {
 				$messages[] = sprintf(
 					'
-						%s &nbsp; <strong style="font-size:1.25em;"><a href="%s">%s</a></strong>
+						%s &nbsp; <strong style="font-size:1.2em;"><a href="%s">%s</a></strong>
 						<a style="float:right;" href="%s">%s</a>
 					',
 					__( 'Install our sister product Benchmark Email Lite to view campaign statistics.', 'woo-benchmark-email' ),
@@ -73,8 +73,9 @@ class bmew_admin {
 		// Message If Plugin Isn't Configured
 		if( empty( get_option( 'bmew_key' ) ) ) {
 			$messages[] = sprintf(
-				'<a href="admin.php?page=wc-settings&tab=bmew">%s</a>',
-				__( 'Please configure your API Key to use Woo Benchmark Email.', 'woo-benchmark-email' )
+				'%s &nbsp; <strong style="font-size:1.2em;"><a href="admin.php?page=wc-settings&tab=bmew">%s</a></strong>',
+				__( 'Please configure your API Key to use Woo Benchmark Email.', 'woo-benchmark-email' ),
+				__( 'Configure Now', 'woo-benchmark-email' )
 			);
 		}
 

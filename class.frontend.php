@@ -124,7 +124,7 @@ class bmew_frontend {
 		// Find Appropriate Contact List
 		$key = get_option( 'bmew_key' );
 		$lists = get_option( 'bmew_lists' );
-		$listID = $lists[$key]['abandons'];
+		$listID = isset( $lists[$key]['abandons'] ) ? $lists[$key]['abandons'] : '';
 		if( ! $listID ) { return; }
 
 		// Get Fields From Order
@@ -166,7 +166,7 @@ class bmew_frontend {
 		// Find Appropriate Contact List
 		$key = get_option( 'bmew_key' );
 		$lists = get_option( 'bmew_lists' );
-		$listID = $lists[$key]['abandons'];
+		$listID = isset( $lists[$key]['abandons'] ) ? $lists[$key]['abandons'] : '';
 		if( ! $listID ) { return; }
 
 		// Get Cart Items
@@ -228,14 +228,14 @@ class bmew_frontend {
 		$lists = get_option( 'bmew_lists' );
 
 		// Remove From Abandons List
-		$listID = $lists[$key]['abandons'];
+		$listID = isset( $lists[$key]['abandons'] ) ? $lists[$key]['abandons'] : '';
 		bmew_api::delete_contact_by_email( 'abandons', $listID, $email );
 
 		// Proceed Only If Subscribe Selected
 		if( empty( $_POST['bmew_subscribe'] ) || $_POST['bmew_subscribe'] !== '1' ) { return; }
 
 		// Find Customers List
-		$listID = $lists[$key]['customers'];
+		$listID = isset( $lists[$key]['customers'] ) ? $lists[$key]['customers'] : '';
 		if( ! $listID ) { return; }
 
 		// Save Subscription Action To Order
