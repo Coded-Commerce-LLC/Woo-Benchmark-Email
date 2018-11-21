@@ -11,16 +11,23 @@ class bmew_admin {
 		Admin Messaging
 	**********************/
 
+	// Plugin Action Links
+	static function plugin_action_links( $links ) {
+		$settings = [
+			'settings' => sprintf(
+				'<a href="%s">%s</a>',
+				admin_url( 'admin.php?page=wc-settings&tab=bmew' ),
+				__( 'Settings', 'woo-benchmark-email' )
+			),
+		];
+		return array_merge( $settings, $links );
+	}
+
 	// Admin Dashboard Notifications
 	static function wp_dashboard_setup() {
-		$message = '';
+		$messages = [];
 
-
-		/*********************
-			Sister Product
-		*********************/
-
-		// Handle Dismissal Request
+		// Handle Sister Product Dismissal Request
 		if( ! empty( $_REQUEST['bmew_dismiss_sister'] ) && check_admin_referer( 'bmew_dismiss_sister' ) ) {
 			update_option( 'bmew_sister_dismissed', current_time( 'timestamp') );
 		}
@@ -35,39 +42,50 @@ class bmew_admin {
 
 			// Plugin Installed But Not Activated
 			if( file_exists( WP_PLUGIN_DIR . '/benchmark-email-lite/benchmark-email-lite.php' ) ) {
-				$message =
-					__( 'Activate our sister product Benchmark Email Lite to view campaign statistics.', 'woo-benchmark-email' )
-					. sprintf(
-						' &nbsp; <strong style="font-size:1.25em;"><a href="%s">%s</a></strong>',
-						bmew_admin::get_sister_activate_link(),
-						__( 'Activate Now', 'woo-benchmark-email' )
-					);
+				$messages[] = sprintf(
+					'
+						%s &nbsp; <strong style="font-size:1.25em;"><a href="%s">%s</a></strong>
+						<a style="float:right;" href="%s">%s</a>
+					',
+					__( 'Activate our sister product Benchmark Email Lite to view campaign statistics.', 'woo-benchmark-email' ),
+					bmew_admin::get_sister_activate_link(),
+					__( 'Activate Now', 'woo-benchmark-email' ),
+					bmew_admin::get_sister_dismiss_link(),
+					__( 'dismiss for 90 days', 'woo-benchmark-email' )
+				);
 
 			// Plugin Not Installed
 			} else {
-				$message =
-					__( 'Install our sister product Benchmark Email Lite to view campaign statistics.', 'woo-benchmark-email' )
-					. sprintf(
-						' &nbsp; <strong style="font-size:1.25em;"><a href="%s">%s</a></strong>',
-						bmew_admin::get_sister_install_link(),
-						__( 'Install Now', 'woo-benchmark-email' )
-					);
+				$messages[] = sprintf(
+					'
+						%s &nbsp; <strong style="font-size:1.25em;"><a href="%s">%s</a></strong>
+						<a style="float:right;" href="%s">%s</a>
+					',
+					__( 'Install our sister product Benchmark Email Lite to view campaign statistics.', 'woo-benchmark-email' ),
+					bmew_admin::get_sister_install_link(),
+					__( 'Install Now', 'woo-benchmark-email' ),
+					bmew_admin::get_sister_dismiss_link(),
+					__( 'dismiss for 90 days', 'woo-benchmark-email' )
+				);
 			}
+		}
 
-			// Dismiss Link
-			$message .= sprintf(
-				' <a style="float:right;" href="%s">%s</a>',
-				bmew_admin::get_sister_dismiss_link(),
-				__( 'dismiss for 90 days', 'woo-benchmark-email' )
+		// Message If Plugin Isn't Configured
+		if( empty( get_option( 'bmew_key' ) ) ) {
+			$messages[] = sprintf(
+				'<a href="admin.php?page=wc-settings&tab=bmew">%s</a>',
+				__( 'Please configure your API Key to use Woo Benchmark Email.', 'woo-benchmark-email' )
 			);
 		}
 
 		// Output Message
-		if( $message ) {
-			echo sprintf(
-				'<div class="notice notice-info is-dismissible"><p>%s</p></div>',
-				print_r( $message, true )
-			);
+		if( $messages ) {
+			foreach( $messages as $message ) {
+				echo sprintf(
+					'<div class="notice notice-info is-dismissible"><p>%s</p></div>',
+					print_r( $message, true )
+				);
+			}
 		}
 	}
 
@@ -104,9 +122,9 @@ class bmew_admin {
 	}
 
 
-	/***************************
-		WooCommerce Settings
-	***************************/
+	/**********************
+	  WooCommerce Settings
+	***********************/
 
 	// Load Settings API Class
 	static function woocommerce_get_settings_pages( $settings ) {

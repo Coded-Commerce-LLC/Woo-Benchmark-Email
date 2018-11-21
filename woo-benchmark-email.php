@@ -43,6 +43,7 @@ if(
 	// Admin Hooks
 	add_action( 'admin_enqueue_scripts', [ 'bmew_admin', 'admin_enqueue_scripts' ] );
 	add_action( 'wp_dashboard_setup', [ 'bmew_admin', 'wp_dashboard_setup' ] );
+	add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), [ 'bmew_admin', 'plugin_action_links' ] );
 	add_filter( 'woocommerce_get_settings_pages', [ 'bmew_admin', 'woocommerce_get_settings_pages' ] );
 
 	// AJAX Hooks

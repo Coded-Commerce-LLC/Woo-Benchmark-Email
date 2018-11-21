@@ -1,11 +1,15 @@
 <?php
- 
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-if ( ! class_exists( 'WC_Settings_MyPlugin' ) ) :
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) exit;
 
+// Only If Not Already Defined
+if ( ! class_exists( 'WC_Settings_BMEW' ) ) :
+
+// Woo Benchmark Email Settings Class
 class WC_Settings_BMEW extends WC_Settings_Page {
 
+	// Constructor
 	public function __construct() {
 		$this->id = 'bmew';
 		$this->label = __( 'Benchmark Email', 'woo-benchmark-email' );
@@ -14,7 +18,13 @@ class WC_Settings_BMEW extends WC_Settings_Page {
 		add_action( 'woocommerce_settings_save_' . $this->id, [ $this, 'save' ] );
 	}
 
+	// Get Settings Array
 	public function get_settings() {
+
+		// Load Messages
+		bmew_admin::wp_dashboard_setup();
+
+		// Return Settings Array
 		return apply_filters( 'woocommerce_' . $this->id . '_settings', [
 
 			// Add Section Title
