@@ -36,7 +36,7 @@ class bmew_admin {
 		$bmew_sister_dismissed = get_option( 'bmew_sister_dismissed' );
 		if(
 			$bmew_sister_dismissed < current_time( 'timestamp') - 86400 * 90
-			&& is_plugin_inactive( 'benchmark-email-lite/benchmark-email-lite.php' )
+			&& ! is_plugin_active( 'benchmark-email-lite/benchmark-email-lite.php' )
 			&& current_user_can( 'activate_plugins' )
 		) {
 
