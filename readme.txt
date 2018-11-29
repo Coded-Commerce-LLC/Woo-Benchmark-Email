@@ -5,7 +5,7 @@ Tags: WooCommerce, Abandoned cart, Drip campaigns, Email marketing automation, B
 Requires at least: 4.0.1
 Tested up to: 5.0
 Requires PHP: 5.6
-Stable tag: 1.1
+Stable tag: 1.2
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -51,6 +51,15 @@ Feature: Sync all order history to Woo Customers list
 2. A sample user completing checkout showing the data being captured behind the scenes as viewed from the inspector.
 
 == Changelog ==
+
+= 1.2 on 2018-11-29 =
+* Added: button to Get API Key on settings page
+* Added: link to Settings on the plugins page
+* Added: admin dashboard notice if API key not set
+* Added: error handling to modal API Key logic
+* Updated: Enabled our dashboard notices on plugin settings page as well as the main dashboard area
+* Fixed: invalid function call is_plugin_inactive
+* Fixed: array validation to prevent PHP notice and potential AJAX add-to-cart failure if API key or lists are unset and WP_DEBUG is turned ON
 
 = 1.1 on 2018-11-06 =
 * Added: Sister product activation and installation checks and message with dismiss link.
