@@ -32,6 +32,11 @@ class bmew_admin {
 			update_option( 'bmew_sister_dismissed', current_time( 'timestamp') );
 		}
 
+		// Ensure is_plugin_active() Exists
+		if( ! function_exists( 'is_plugin_active' ) ) {
+			include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+		}
+
 		// Check Sister Product
 		$bmew_sister_dismissed = get_option( 'bmew_sister_dismissed' );
 		if(
