@@ -25,16 +25,16 @@ class bmew_admin {
 
 	// Admin Dashboard Notifications
 	static function wp_dashboard_setup() {
+
+		// Ensure is_plugin_active() Exists
+		if( ! function_exists( 'is_plugin_active' ) ) {
+			include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+		}
 		$messages = [];
 
 		// Handle Sister Product Dismissal Request
 		if( ! empty( $_REQUEST['bmew_dismiss_sister'] ) && check_admin_referer( 'bmew_dismiss_sister' ) ) {
 			update_option( 'bmew_sister_dismissed', current_time( 'timestamp') );
-		}
-
-		// Ensure is_plugin_active() Exists
-		if( ! function_exists( 'is_plugin_active' ) ) {
-			include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 		}
 
 		// Check Sister Product
