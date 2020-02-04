@@ -12,7 +12,7 @@
  * Domain Path: /languages
  *
  * WC requires at least: 3.0
- * WC tested up to: 3.5.0
+ * WC tested up to: 3.9.1
  *
  * License: GNU General Public License v3.0
  * License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -42,7 +42,7 @@ if(
 
 	// Admin Hooks
 	add_action( 'admin_enqueue_scripts', [ 'bmew_admin', 'admin_enqueue_scripts' ] );
-	add_action( 'wp_dashboard_setup', [ 'bmew_admin', 'wp_dashboard_setup' ] );
+	add_action( 'admin_notices', [ 'bmew_admin', 'admin_notices' ] );
 	add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), [ 'bmew_admin', 'plugin_action_links' ] );
 	add_filter( 'woocommerce_get_settings_pages', [ 'bmew_admin', 'woocommerce_get_settings_pages' ] );
 

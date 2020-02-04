@@ -24,7 +24,7 @@ class bmew_admin {
 	}
 
 	// Admin Dashboard Notifications
-	static function wp_dashboard_setup() {
+	static function admin_notices() {
 
 		// Ensure is_plugin_active() Exists
 		if( ! function_exists( 'is_plugin_active' ) ) {
