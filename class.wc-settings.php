@@ -22,7 +22,7 @@ class WC_Settings_BMEW extends WC_Settings_Page {
 	public function get_settings() {
 
 		// Load Messages
-		bmew_admin::admin_notices();
+		do_action( 'wp_dashboard_setup' );
 
 		// Return Settings Array
 		return apply_filters( 'woocommerce_' . $this->id . '_settings', [

@@ -3,7 +3,7 @@
  * Plugin Name: Woo Benchmark Email
  * Plugin URI: https://codedcommerce.com/product/woo-benchmark-email
  * Description: Connects WooCommerce with Benchmark Email for syncing customers and abandoned carts.
- * Version: 1.2
+ * Version: 1.3-beta
  * Author: Coded Commerce, LLC
  * Author URI: https://codedcommerce.com
  * Developer: Sean Conklin
@@ -30,26 +30,4 @@ if(
 	require_once( 'class.admin.php' );
 	require_once( 'class.api.php' );
 	require_once( 'class.frontend.php' );
-
-	// Front End Hooks
-	add_action( 'init', [ 'bmew_frontend', 'init_contact_lists' ] );
-	add_action( 'woocommerce_checkout_update_order_meta', [ 'bmew_frontend', 'woocommerce_checkout_update_order_meta' ] );
-	add_action( 'wp_enqueue_scripts', [ 'bmew_frontend', 'wp_enqueue_scripts' ] );
-	add_action( 'woocommerce_add_to_cart', [ 'bmew_frontend', 'woocommerce_add_to_cart' ] );
-	add_filter( 'woocommerce_add_to_cart_redirect', [ 'bmew_frontend', 'woocommerce_add_to_cart_redirect' ] );
-	add_filter( 'woocommerce_billing_fields', [ 'bmew_frontend', 'woocommerce_billing_fields' ] );
-	add_filter( 'woocommerce_checkout_fields' , [ 'bmew_frontend', 'woocommerce_checkout_fields' ] );
-
-	// Admin Hooks
-	add_action( 'admin_enqueue_scripts', [ 'bmew_admin', 'admin_enqueue_scripts' ] );
-	add_action( 'admin_notices', [ 'bmew_admin', 'admin_notices' ] );
-	add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), [ 'bmew_admin', 'plugin_action_links' ] );
-	add_filter( 'woocommerce_get_settings_pages', [ 'bmew_admin', 'woocommerce_get_settings_pages' ] );
-
-	// AJAX Hooks
-	add_action( 'wp_ajax_bmew_action', [ 'bmew_frontend', 'wp_ajax__bmew_action' ] );
-	add_action( 'wp_ajax_nopriv_bmew_action', [ 'bmew_frontend', 'wp_ajax__bmew_action' ] );
-
-	// Internationalization
-	add_action( 'plugins_loaded',  [ 'bmew_frontend', 'plugins_loaded' ] );
 }
