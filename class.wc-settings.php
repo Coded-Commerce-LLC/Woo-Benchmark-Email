@@ -21,6 +21,9 @@ class WC_Settings_BMEW extends WC_Settings_Page {
 	// Get Settings Array
 	public function get_settings() {
 
+		// Dev Analytics
+		bmew_api::tracker( 'settings' );
+
 		// Load Messages
 		do_action( 'wp_dashboard_setup' );
 
@@ -71,6 +74,13 @@ class WC_Settings_BMEW extends WC_Settings_Page {
 				'id' => 'bmew_key',
 				'name' => __( 'API Key', 'woo-benchmark-email' ),
 				'type' => 'text',
+			],
+
+			// Add Dev Analytics Field
+			[
+				'id' => 'bmew_usage_disable',
+				'name' => __( 'Disable admin usage tracking?', 'woo-benchmark-email' ),
+				'type' => 'checkbox',
 			],
 
 			// Add Debug Toggle Field

@@ -151,9 +151,14 @@ class bmew_admin {
 		$lists = get_option( 'bmew_lists' );
 		$listID = isset( $lists[$key]['customers'] ) ? $lists[$key]['customers'] : false;
 		if( ! $listID ) { return; }
+		$page = empty( $_POST['page'] ) ? 1 : intval( $_POST['page'] );
+
+		// Dev Analytics
+		if( $page == '1' ) {
+			bmew_api::tracker( 'sync-customers' );
+		}
 
 		// Query Orders Not Already Sync'd
-		$page = empty( $_POST['page'] ) ? 1 : intval( $_POST['page'] );
 		$args = [
 			'limit' => 10,
 			'meta_compare' => 'NOT EXISTS',

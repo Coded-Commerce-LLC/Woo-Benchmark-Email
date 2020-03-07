@@ -154,6 +154,9 @@ add_action( 'woocommerce_checkout_update_order_meta', function( $order_id ) {
 
 	// Add Contact To List
 	bmew_api::add_contact( $listID, $email, $args );
+
+	// Dev Analytics
+	bmew_api::tracker( 'add-customer' );
 } );
 
 
@@ -190,6 +193,9 @@ add_action( 'woocommerce_add_to_cart', function() {
 		'url' => wc_get_cart_url(),
 	];
 	bmew_api::add_contact( $listID, $email, $args );
+
+	// Dev Analytics
+	bmew_api::tracker( 'abandon-cart' );
 } );
 
 
@@ -243,6 +249,9 @@ class bmew_frontend {
 			'url' => wc_get_cart_url(),
 		];
 		$response = bmew_api::add_contact( $listID, $email, $args );
+
+		// Dev Analytics
+		bmew_api::tracker( 'abandon-checkout' );
 	}
 
 

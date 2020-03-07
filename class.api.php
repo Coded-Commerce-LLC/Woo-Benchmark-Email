@@ -6,8 +6,31 @@ if( ! defined( 'ABSPATH' ) ) { exit; }
 // ReST API Class
 class bmew_api {
 
+
 	// Endpoint
 	static $url = 'https://clientapi.benchmarkemail.com/';
+	static $url_tracker = 'https://ssl.google-analytics.com/';
+
+
+	// Developer Analytics
+	static function tracker( $action, $value='' ) {
+ 		$bmew_usage_disable = get_option( 'bmew_usage_disable' );
+ 		if( $bmew_usage_disable == '1' ) { return; }
+ 		$body = [
+ 			'v' => 1,
+ 			'tid' => 'UA-120661799-1',
+ 			'cid' => get_current_user_id(),
+ 			't' => 'event',
+ 			'ec' => 'BMEW1',
+ 			'ea' => $action,
+ 			'el' => ucwords( $action ),
+ 			'ev' => $value,
+ 		];
+ 		$args = [ 'body' => $body ];
+ 		$url = self::$url_tracker . 'collect';
+ 		$response = wp_remote_post( $url, $args );
+ 	}
+
 
 	// Adds a Contact To a List
 	static function add_contact( $listID, $email, $args = [] ) {

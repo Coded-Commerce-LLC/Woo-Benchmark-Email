@@ -3,7 +3,7 @@
  * Plugin Name: Woo Benchmark Email
  * Plugin URI: https://codedcommerce.com/product/woo-benchmark-email
  * Description: Connects WooCommerce with Benchmark Email for syncing customers and abandoned carts.
- * Version: 1.3-beta
+ * Version: 1.3
  * Author: Coded Commerce, LLC
  * Author URI: https://codedcommerce.com
  * Developer: Sean Conklin
@@ -12,7 +12,7 @@
  * Domain Path: /languages
  *
  * WC requires at least: 3.0
- * WC tested up to: 3.9.1
+ * WC tested up to: 4.0
  *
  * License: GNU General Public License v3.0
  * License URI: http://www.gnu.org/licenses/gpl-3.0.html
