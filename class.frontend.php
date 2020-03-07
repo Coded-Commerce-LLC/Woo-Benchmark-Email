@@ -54,14 +54,15 @@ add_action( 'init', function() {
 } );
 
 
-// AJAX Hooks
-add_action( 'wp_ajax_bmew_action', [ 'bmew_frontend', 'wp_ajax__bmew_action' ] );
-add_action( 'wp_ajax_nopriv_bmew_action', [ 'bmew_frontend', 'wp_ajax__bmew_action' ] );
+// AJAX Handler
+add_action( 'wp_ajax_bmew_action', 'wp_ajax__bmew_action' );
+add_action( 'wp_ajax_nopriv_bmew_action', 'wp_ajax__bmew_action' );
 function wp_ajax__bmew_action() {
 
 	// Sync Action Is Requested
 	if( empty( $_POST['sync'] ) ) { return; }
 	switch( $_POST['sync'] ) {
+
 
 		// API Key
 		case 'get_api_key':
@@ -70,14 +71,104 @@ function wp_ajax__bmew_action() {
 			echo $response ? $response : __( 'Error - Please try again', 'woo-benchmark-email' );
 			wp_die();
 
+
 		// Customer Sync
 		case 'sync_customers':
-			echo bmew_admin::wp_ajax__bmew_action__sync_customers();
+
+			// Find Appropriate Contact List
+			$key = get_option( 'bmew_key' );
+			$lists = get_option( 'bmew_lists' );
+			$listID = isset( $lists[$key]['customers'] ) ? $lists[$key]['customers'] : false;
+			if( ! $listID ) { return; }
+			$page = empty( $_POST['page'] ) ? 1 : intval( $_POST['page'] );
+
+			// Dev Analytics
+			if( $page == '1' ) {
+				bmew_api::tracker( 'sync-customers' );
+			}
+
+			// Query Orders Not Already Sync'd
+			$args = [
+				'limit' => 10,
+				'meta_compare' => 'NOT EXISTS',
+				'meta_key' => '_bmew_syncd',
+				'order' => 'ASC',
+				'orderby' => 'ID',
+				'page' => $page,
+				'return' => 'ids',
+			];
+			$query = new WC_Order_Query( $args );
+			$orders = $query->get_orders();
+
+			// Loop Results
+			foreach( $orders as $order_id ) {
+
+				// Get Fields From Order
+				$email = get_post_meta( $order_id, '_billing_email', true );
+
+				// Skip If No Email Provided
+				if( ! $email ) { continue; }
+
+				// Get Order Record
+				$_order = wc_get_order( $order_id );
+
+				// Get Order Details
+				$args = bmew_frontend::get_order_details( $order_id, $email );
+
+				// Add Contact To List
+				$response = bmew_api::add_contact( $listID, $email, $args );
+
+				// If Successful, Mark Order As Sync'd
+				if( intval( $response ) > 0 ) {
+					update_post_meta( $order_id, '_bmew_syncd', current_time( 'timestamp' ) );
+				}
+			}
+
+			// Handle Finish
+			if( ! $orders ) { $page = 0; }
+
+			// Return
+			echo $page;
+
+			// Exit
 			wp_die();
+
 
 		// Abandoned Cart
 		case 'abandoned_cart':
-			echo bmew_frontend::wp_ajax__bmew_action__abandoned_cart();
+			global $woocommerce;
+
+			// Find Appropriate Contact List
+			$key = get_option( 'bmew_key' );
+			$lists = get_option( 'bmew_lists' );
+			$listID = isset( $lists[$key]['abandons'] ) ? $lists[$key]['abandons'] : '';
+			if( ! $listID ) { return; }
+
+			// Get Fields From Order
+			$email = isset( $_POST['email'] ) ? sanitize_email( $_POST['email'] ) : '';
+
+			// Skip If No Email Provided
+			if( ! $email ) { return; }
+
+			// Get Cart Items
+			$products = bmew_frontend::get_products();
+
+			// Add Contact To List
+			$args = [
+				'first' => isset( $_POST['billing_first_name'] ) ? sanitize_text_field( $_POST['billing_first_name'] ) : '',
+				'last' => isset( $_POST['billing_last_name'] ) ? sanitize_text_field( $_POST['billing_last_name'] ) : '',
+				'product1' => isset( $products[0] ) ? $products[0] : '',
+				'product2' => isset( $products[1] ) ? $products[1] : '',
+				'product3' => isset( $products[2] ) ? $products[2] : '',
+				'total' => get_woocommerce_currency_symbol() . $woocommerce->cart->total,
+				'url' => wc_get_cart_url(),
+			];
+			$response = bmew_api::add_contact( $listID, $email, $args );
+
+			// Dev Analytics
+			bmew_api::tracker( 'abandon-checkout' );
+
+			// Exit
 			wp_die();
 	}
 
@@ -217,42 +308,6 @@ class bmew_frontend {
 		'abandons' => 'WooCommerce Abandoned Carts',
 		'customers' => 'WooCommerce Customers',
 	];
-
-
-	// Checkout Form AJAX - Capture Abandons
-	static function wp_ajax__bmew_action__abandoned_cart() {
-		global $woocommerce;
-
-		// Find Appropriate Contact List
-		$key = get_option( 'bmew_key' );
-		$lists = get_option( 'bmew_lists' );
-		$listID = isset( $lists[$key]['abandons'] ) ? $lists[$key]['abandons'] : '';
-		if( ! $listID ) { return; }
-
-		// Get Fields From Order
-		$email = isset( $_POST['email'] ) ? sanitize_email( $_POST['email'] ) : '';
-
-		// Skip If No Email Provided
-		if( ! $email ) { return; }
-
-		// Get Cart Items
-		$products = bmew_frontend::get_products();
-
-		// Add Contact To List
-		$args = [
-			'first' => isset( $_POST['billing_first_name'] ) ? sanitize_text_field( $_POST['billing_first_name'] ) : '',
-			'last' => isset( $_POST['billing_last_name'] ) ? sanitize_text_field( $_POST['billing_last_name'] ) : '',
-			'product1' => isset( $products[0] ) ? $products[0] : '',
-			'product2' => isset( $products[1] ) ? $products[1] : '',
-			'product3' => isset( $products[2] ) ? $products[2] : '',
-			'total' => get_woocommerce_currency_symbol() . $woocommerce->cart->total,
-			'url' => wc_get_cart_url(),
-		];
-		$response = bmew_api::add_contact( $listID, $email, $args );
-
-		// Dev Analytics
-		bmew_api::tracker( 'abandon-checkout' );
-	}
 
 
 	// Get Cart Details - Helper Function

@@ -1,13 +1,17 @@
 <?php
 
+
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
+
 
 // Only If Not Already Defined
 if ( ! class_exists( 'WC_Settings_BMEW' ) ) :
 
+
 // Woo Benchmark Email Settings Class
 class WC_Settings_BMEW extends WC_Settings_Page {
+
 
 	// Constructor
 	public function __construct() {
@@ -17,6 +21,7 @@ class WC_Settings_BMEW extends WC_Settings_Page {
 		add_action( 'woocommerce_settings_' . $this->id, [ $this, 'output' ] );
 		add_action( 'woocommerce_settings_save_' . $this->id, [ $this, 'save' ] );
 	}
+
 
 	// Get Settings Array
 	public function get_settings() {

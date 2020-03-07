@@ -1,7 +1,9 @@
 <?php
 
+
 // Exit If Accessed Directly
 if( ! defined( 'ABSPATH' ) ) { exit; }
+
 
 // ReST API Class
 class bmew_api {
@@ -119,6 +121,7 @@ class bmew_api {
 		}
 	}
 
+
 	// Adds a Contact List
 	static function add_list( $name ) {
 		$body = [ 'Data' => [ 'Description' => $name, 'Name' => $name ] ];
@@ -126,10 +129,12 @@ class bmew_api {
 		return empty( $response->ID ) ? $response : intval( $response->ID );
 	}
 
+
 	// Get Contact From a List
 	static function get_contact( $listID, $contactID ) {
 		return bmew_api::benchmark_query( 'Contact/' . $listID . '/ContactDetails/' . $contactID );
 	}
+
 
 	// Gets Client IP Address
 	static function get_client_ip() {
@@ -147,10 +152,12 @@ class bmew_api {
 			return $_SERVER[ 'REMOTE_ADDR' ];
 	}
 
+
 	// Get All Contact Lists
 	static function get_lists() {
 		return bmew_api::benchmark_query( 'Contact/' );
 	}
+
 
 	// Vendor Handshake
 	static function update_partner() {
@@ -158,6 +165,7 @@ class bmew_api {
 		$body = [ 'PartnerLogin' => 'beautomated' ];
 		$response = bmew_api::benchmark_query( $uri, 'POST', $body );
 	}
+
 
 	// Gets Temporary Token And API Key From User / Pass
 	static function get_api_key( $user, $pass ) {
@@ -172,6 +180,7 @@ class bmew_api {
 		$response = bmew_api::benchmark_query( 'Client/Setting', 'GET', null, $key );
 		return isset( $response->Response->Token ) ? $response->Response->Token : false;
 	}
+
 
 	// Talk To Benchmark ReST API
 	static function benchmark_query( $uri = '', $method = 'GET', $body = null, $key = null ) {
@@ -196,6 +205,7 @@ class bmew_api {
 		return isset( $response->Response->Data ) ? $response->Response->Data : $response;
 	}
 
+
 	// Log Communications
 	static function logger( $url, $request, $response ) {
 		$bmew_debug = get_option( 'bmew_debug' );
@@ -209,6 +219,7 @@ class bmew_api {
 		$logger->debug( "==RESPONSE== " . $response, $context );
 	}
 
+
 	// Legacy XML-RPC API
 	static function benchmark_query_legacy() {
 		require_once( ABSPATH . WPINC . '/class-IXR.php' );
@@ -220,4 +231,5 @@ class bmew_api {
 		bmew_api::logger( $url, $args, $response );
 		return $response;
 	}
+
 }
