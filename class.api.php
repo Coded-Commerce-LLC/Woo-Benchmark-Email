@@ -15,7 +15,7 @@ class bmew_api {
 
 
 	// Developer Analytics
-	static function tracker( $action, $value='' ) {
+	static function tracker( $action ) {
  		$bmew_usage_disable = get_option( 'bmew_usage_disable' );
  		if( $bmew_usage_disable == '1' ) { return; }
  		$body = [
@@ -26,10 +26,9 @@ class bmew_api {
  			'ec' => 'BMEW1',
  			'ea' => $action,
  			'el' => ucwords( $action ),
- 			'ev' => $value,
  		];
  		$args = [ 'body' => $body ];
- 		$url = self::$url_tracker . 'collect';
+ 		$url = self::$url_tracker . 'collect?z=' . rand( 123456, 654321 );
  		$response = wp_remote_post( $url, $args );
  	}
 
