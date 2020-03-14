@@ -9,9 +9,10 @@ if( ! defined( 'ABSPATH' ) ) { exit; }
 class bmew_api {
 
 
-	// Endpoint
-	static $url = 'https://clientapi.benchmarkemail.com/';
-	static $url_tracker = 'https://ssl.google-analytics.com/';
+	// Endpoints
+	static
+		$url = 'https://clientapi.benchmarkemail.com/',
+		$url_tracker = 'https://ssl.google-analytics.com/';
 
 
 	// Developer Analytics
@@ -131,7 +132,9 @@ class bmew_api {
 
 	// Get Contact From a List
 	static function get_contact( $listID, $contactID ) {
-		return bmew_api::benchmark_query( 'Contact/' . $listID . '/ContactDetails/' . $contactID );
+		return bmew_api::benchmark_query(
+			'Contact/' . $listID . '/ContactDetails/' . $contactID
+		);
 	}
 
 

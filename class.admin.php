@@ -12,7 +12,7 @@ add_action( 'admin_enqueue_scripts', function() {
 
 
 // Plugin Action Links
-add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), function( $links ) {
+add_filter( 'plugin_action_links_woo-benchmark-email/woo-benchmark-email.php', function( $links ) {
 	$settings = [
 		'settings' => sprintf(
 			'<a href="%s">%s</a>',
@@ -50,7 +50,7 @@ add_action( 'wp_dashboard_setup', function() {
 		if( file_exists( WP_PLUGIN_DIR . '/benchmark-email-lite/benchmark-email-lite.php' ) ) {
 			$messages[] = sprintf(
 				'
-					%s &nbsp; <strong style="font-size:1.2em;"><a href="%s">%s</a></strong>
+					%s &nbsp; <strong><a href="%s">%s</a></strong>
 					<a style="float:right;" href="%s">%s</a>
 				',
 				__( 'Activate our sister product Benchmark Email Lite to view campaign statistics.', 'woo-benchmark-email' ),
@@ -64,7 +64,7 @@ add_action( 'wp_dashboard_setup', function() {
 		} else {
 			$messages[] = sprintf(
 				'
-					%s &nbsp; <strong style="font-size:1.2em;"><a href="%s">%s</a></strong>
+					%s &nbsp; <strong><a href="%s">%s</a></strong>
 					<a style="float:right;" href="%s">%s</a>
 				',
 				__( 'Install our sister product Benchmark Email Lite to view campaign statistics.', 'woo-benchmark-email' ),
@@ -79,7 +79,7 @@ add_action( 'wp_dashboard_setup', function() {
 	// Message If Plugin Isn't Configured
 	if( empty( get_option( 'bmew_key' ) ) ) {
 		$messages[] = sprintf(
-			'%s &nbsp; <strong style="font-size:1.2em;"><a href="admin.php?page=wc-settings&tab=bmew">%s</a></strong>',
+			'%s &nbsp; <strong><a href="admin.php?page=wc-settings&tab=bmew">%s</a></strong>',
 			__( 'Please configure your API Key to use Woo Benchmark Email.', 'woo-benchmark-email' ),
 			__( 'Configure Now', 'woo-benchmark-email' )
 		);

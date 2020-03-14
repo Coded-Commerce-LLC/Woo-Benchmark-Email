@@ -7,8 +7,12 @@ if( ! defined( 'ABSPATH' ) ) { exit; }
 
 // Load Scripts
 add_action( 'wp_enqueue_scripts', function() {
-	wp_enqueue_script( 'bmew_frontend', plugin_dir_url( __FILE__ ) . 'frontend.js', [ 'jquery' ], null );
-	wp_localize_script( 'bmew_frontend', 'bmew_ajax_object', [ 'ajax_url' => admin_url( 'admin-ajax.php' ) ] );
+	wp_enqueue_script(
+		'bmew_frontend', plugin_dir_url( __FILE__ ) . 'frontend.js', [ 'jquery' ], null
+	);
+	wp_localize_script(
+		'bmew_frontend', 'bmew_ajax_object', [ 'ajax_url' => admin_url( 'admin-ajax.php' ) ]
+	);
 } );
 
 
@@ -155,8 +159,10 @@ function wp_ajax__bmew_action() {
 
 			// Add Contact To List
 			$args = [
-				'first' => isset( $_POST['billing_first_name'] ) ? sanitize_text_field( $_POST['billing_first_name'] ) : '',
-				'last' => isset( $_POST['billing_last_name'] ) ? sanitize_text_field( $_POST['billing_last_name'] ) : '',
+				'first' => isset( $_POST['billing_first_name'] )
+					? sanitize_text_field( $_POST['billing_first_name'] ) : '',
+				'last' => isset( $_POST['billing_last_name'] )
+					? sanitize_text_field( $_POST['billing_last_name'] ) : '',
 				'product1' => isset( $products[0] ) ? $products[0] : '',
 				'product2' => isset( $products[1] ) ? $products[1] : '',
 				'product3' => isset( $products[2] ) ? $products[2] : '',

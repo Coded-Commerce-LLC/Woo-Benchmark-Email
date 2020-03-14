@@ -40,9 +40,13 @@ class WC_Settings_BMEW extends WC_Settings_Page {
 
 			// Add Skip Cart Field
 			[
-				'desc' => '<br>' . __( 'Skips the cart step and redirects customers to the checkout form that conveniently displays a mini cart.', 'woo-benchmark-email' )
-					. '<br>' . __( "If they need to edit their cart, they will have to click on your theme's cart link in order to do so.", 'woo-benchmark-email' ),
-				'desc_tip' => __( 'This may improve the chances of the email address being provided by customers and thus available to abandoned cart offers.', 'woo-benchmark-email' ),
+				'desc' =>
+					'<br>'
+					. __( 'Skips the cart step and redirects customers to the checkout form that conveniently displays a mini cart.', 'woo-benchmark-email' )
+					. '<br>'
+					. __( "If they need to edit their cart, they will have to click on your theme's cart link in order to do so.", 'woo-benchmark-email' ),
+				'desc_tip' =>
+					__( 'This may improve the chances of the email address being provided by customers and thus available to abandoned cart offers.', 'woo-benchmark-email' ),
 				'id' => 'bmew_skip_cart',
 				'name' => __( 'Skip the cart step', 'woo-benchmark-email' ),
 				'type' => 'checkbox',
@@ -50,8 +54,11 @@ class WC_Settings_BMEW extends WC_Settings_Page {
 
 			// Add Move Email Field
 			[
-				'desc' => '<br>' . __( 'Moves the email address and phone number fields up and underneath the name fields.', 'woo-benchmark-email' ),
-				'desc_tip' => __( 'This may improve the chances of the email address being provided by customers and thus available to abandoned cart offers.', 'woo-benchmark-email' ),
+				'desc' =>
+					'<br>'
+					. __( 'Moves the email address and phone number fields up and underneath the name fields.', 'woo-benchmark-email' ),
+				'desc_tip' =>
+					__( 'This may improve the chances of the email address being provided by customers and thus available to abandoned cart offers.', 'woo-benchmark-email' ),
 				'id' => 'bmew_checkout_reorder',
 				'name' => __( 'Move email field up', 'woo-benchmark-email' ),
 				'type' => 'checkbox',
@@ -90,8 +97,11 @@ class WC_Settings_BMEW extends WC_Settings_Page {
 
 			// Add Debug Toggle Field
 			[
-				'desc' => '<br>' . __( 'For temporary use, saves all API communications into WooCommerce > Status > Logs.', 'woo-benchmark-email' ),
-				'desc_tip' => __( "For a nicer logs UI, set `define( 'WC_LOG_HANDLER', 'WC_Log_Handler_DB' );` inside your  `wp-config.php`.", 'woo-benchmark-email' ),
+				'desc' =>
+					'<br>'
+					. __( 'For temporary use, saves all API communications into WooCommerce > Status > Logs.', 'woo-benchmark-email' ),
+				'desc_tip' =>
+					__( "For a nicer logs UI, set `define( 'WC_LOG_HANDLER', 'WC_Log_Handler_DB' );` inside your  `wp-config.php`.", 'woo-benchmark-email' ),
 				'id' => 'bmew_debug',
 				'name' => __( 'Log debug messages?', 'woo-benchmark-email' ),
 				'type' => 'checkbox',
