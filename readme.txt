@@ -5,7 +5,7 @@ Tags: WooCommerce, Abandoned cart, Drip campaigns, Email marketing automation, B
 Requires at least: 4.0.1
 Tested up to: 5.3.2
 Requires PHP: 5.6
-Stable tag: 1.3
+Stable tag: 1.4
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -56,6 +56,10 @@ Feature: Sync all order history to Woo Customers list
 
 == Changelog ==
 
+= 1.4 on 2020-03-XX =
+* Added: settings to select which lists are used for Abandons and Customers.
+* Fixed: plugins page settings link.
+
 = 1.3 on 2020-03-09 =
 * Added: developer admin analytics
 * Updated: tested-to for WooCommerce v4.0 RC2 releasing eminently
@@ -84,6 +88,10 @@ Feature: Sync all order history to Woo Customers list
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.4 = 
+
+* Bug fix release.
 
 = 1.3 = 
 * WooCommerce 4.0 support and developer analytics.
