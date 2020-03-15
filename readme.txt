@@ -58,6 +58,8 @@ Feature: Sync all order history to Woo Customers list
 
 = 1.4 on 2020-03-XX =
 * Added: settings to select which lists are used for Abandons and Customers.
+* Updated: Removed caching of ListIDs to support translated list names.
+* Updated: Consolidated debug logger messages to single entries.
 * Fixed: plugins page settings link.
 
 = 1.3 on 2020-03-09 =
