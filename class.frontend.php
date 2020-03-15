@@ -234,7 +234,7 @@ add_action( 'woocommerce_checkout_update_order_meta', function( $order_id ) {
 
 	// Remove From Abandons List
 	$listID = isset( $lists[$key]['abandons'] ) ? $lists[$key]['abandons'] : '';
-	bmew_api::delete_contact_by_email( 'abandons', $listID, $email );
+	bmew_api::delete_contact_by_email( $listID, $email );
 
 	// Proceed Only If Subscribe Selected
 	if( empty( $_POST['bmew_subscribe'] ) || $_POST['bmew_subscribe'] !== '1' ) { return; }
@@ -307,13 +307,6 @@ add_filter( 'woocommerce_add_to_cart_redirect', function( $wc_cart_url ) {
 
 // Front End Plugin Logic
 class bmew_frontend {
-
-
-	// Class Properties
-	static $list_names = [
-		'abandons' => 'WooCommerce Abandoned Carts',
-		'customers' => 'WooCommerce Customers',
-	];
 
 
 	// Get Cart Details - Helper Function
@@ -421,26 +414,38 @@ class bmew_frontend {
 	// Match a Contact List - Helper Function
 	static function match_list( $list_slug ) {
 
+		// Default List Names
+		$default_list_names = [
+			'abandons' => [
+				'WooCommerce Abandoned Carts',
+				'WooCommerce Abandoned Carts ES',
+				'WooCommerce Abandoned Carts BR',
+				'WooCommerce Abandoned Carts JP',
+			],
+			'customers' => [
+				'WooCommerce Customers',
+				'WooCommerce Customers ES',
+				'WooCommerce Customers BR',
+				'WooCommerce Customers JP',
+			],
+		];
+
 		// Load Lists, If Not Already Loaded
 		$lists = bmew_api::get_lists();
-
-		// Handle Error Retrieving Lists
 		if( ! is_array( $lists ) ) { return false; }
 
 		// Loop Contact Lists
 		foreach( $lists as $list ) {
-
-			// Skip Bad Result
 			if( empty( $list->ID ) || empty( $list->Name ) ) { continue; }
-
-			// Handle a Match
-			if( $list->Name == bmew_frontend::$list_names[$list_slug] ) {
-				return $list->ID;
+			foreach( $default_list_names[$list_slug] as $default_list_name ) {
+				if( $list->Name == $default_list_name ) {
+					return $list->ID;
+				}
 			}
 		}
 
 		// Add Missing Contact List
-		return bmew_api::add_list( bmew_frontend::$list_names[$list_slug] );
+		return bmew_api::add_list( $default_list_names[$list_slug][0] );
 	}
 
 }

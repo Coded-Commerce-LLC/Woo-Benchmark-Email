@@ -111,11 +111,11 @@ class bmew_api {
 	}
 
 	// Find a Contact By Email, Then Delete
-	static function delete_contact_by_email( $list_slug, $listID, $email ) {
+	static function delete_contact_by_email( $listID, $email ) {
 		$results = self::find_contact( $email );
 		if( ! is_array( $results ) ) { return; }
 		foreach( $results as $row ) {
-			if( $row->ListName == bmew_frontend::$list_names[$list_slug] ) {
+			if( $row->ContactMasterID == $listID ) {
 				bmew_api::delete_contact( $listID, $row->ID );
 			}
 		}
