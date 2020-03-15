@@ -12,7 +12,9 @@ add_action( 'admin_enqueue_scripts', function() {
 
 
 // Plugin Action Links
-add_filter( 'plugin_action_links_woo-benchmark-email/woo-benchmark-email.php', function( $links ) {
+add_filter(
+	'plugin_action_links_woo-benchmark-email/woo-benchmark-email.php',
+	function( $links ) {
 	$settings = [
 		'settings' => sprintf(
 			'<a href="%s">%s</a>',

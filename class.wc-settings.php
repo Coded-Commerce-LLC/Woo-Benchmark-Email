@@ -88,25 +88,6 @@ class WC_Settings_BMEW extends WC_Settings_Page {
 				'type' => 'text',
 			],
 
-			// Add Dev Analytics Field
-			[
-				'id' => 'bmew_usage_disable',
-				'name' => __( 'Disable admin usage tracking?', 'woo-benchmark-email' ),
-				'type' => 'checkbox',
-			],
-
-			// Add Debug Toggle Field
-			[
-				'desc' =>
-					'<br>'
-					. __( 'For temporary use, saves all API communications into WooCommerce > Status > Logs.', 'woo-benchmark-email' ),
-				'desc_tip' =>
-					__( "For a nicer logs UI, set `define( 'WC_LOG_HANDLER', 'WC_Log_Handler_DB' );` inside your  `wp-config.php`.", 'woo-benchmark-email' ),
-				'id' => 'bmew_debug',
-				'name' => __( 'Log debug messages?', 'woo-benchmark-email' ),
-				'type' => 'checkbox',
-			],
-
 			// Add Sync Customers Field
 			[
 				'desc' => '
@@ -130,6 +111,25 @@ class WC_Settings_BMEW extends WC_Settings_Page {
 				'desc_tip' => __( 'This will sync all historic customers to Benchmark Email.', 'woo-benchmark-email' ),
 				'id' => 'bmew_sync',
 				'name' => __( 'Sync historic customers', 'woo-benchmark-email' ),
+				'type' => 'checkbox',
+			],
+
+			// Add Dev Analytics Field
+			[
+				'id' => 'bmew_usage_disable',
+				'name' => __( 'Disable admin usage tracking?', 'woo-benchmark-email' ),
+				'type' => 'checkbox',
+			],
+
+			// Add Debug Toggle Field
+			[
+				'desc' =>
+					'<br>'
+					. __( 'For temporary use, saves all API communications into WooCommerce > Status > Logs.', 'woo-benchmark-email' ),
+				'desc_tip' =>
+					__( "For a nicer logs UI, set `define( 'WC_LOG_HANDLER', 'WC_Log_Handler_DB' );` inside your  `wp-config.php`.", 'woo-benchmark-email' ),
+				'id' => 'bmew_debug',
+				'name' => __( 'Log debug messages?', 'woo-benchmark-email' ),
 				'type' => 'checkbox',
 			],
 
