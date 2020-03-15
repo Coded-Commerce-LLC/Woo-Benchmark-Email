@@ -16,48 +16,6 @@ add_action( 'wp_enqueue_scripts', function() {
 } );
 
 
-// Initialize Contact Lists
-add_action( 'init', function() {
-
-	// Skip If No API Key Is Set
-	$key = get_option( 'bmew_key' );
-	if( empty( $key ) ) { return; }
-
-	// Skip If Already Set-Up
-	$lists = get_option( 'bmew_lists' );
-	if(
-		! empty( $lists[$key]['handshake'] )
-		&& ! empty( $lists[$key]['abandons'] )
-		&& ! empty( $lists[$key]['customers'] )
-	) {
-		return;
-	}
-
-	// Not Already Set-Up
-	if( ! is_array( $lists ) ) { $lists = []; }
-
-	// Register Vendor With API Key
-	if( empty( $lists[$key]['handshake'] ) ) {
-		//bmew_api::benchmark_query_legacy( 'UpdatePartner', $key, 'beautomated' );
-		bmew_api::update_partner();
-		$lists[$key]['handshake'] = current_time( 'timestamp' );
-	}
-
-	// Check For Abandons List
-	if( empty( $lists[$key]['abandons'] ) ) {
-		$lists[$key]['abandons'] = bmew_frontend::match_list( 'abandons' );
-	}
-
-	// Check For Registered Customers List
-	if( empty( $lists[$key]['customers'] ) ) {
-		$lists[$key]['customers'] = bmew_frontend::match_list( 'customers' );
-	}
-
-	// Update Stored Setting
-	update_option( 'bmew_lists', $lists );
-} );
-
-
 // AJAX Handler
 add_action( 'wp_ajax_bmew_action', 'wp_ajax__bmew_action' );
 add_action( 'wp_ajax_nopriv_bmew_action', 'wp_ajax__bmew_action' );
@@ -81,8 +39,7 @@ function wp_ajax__bmew_action() {
 
 			// Find Appropriate Contact List
 			$key = get_option( 'bmew_key' );
-			$lists = get_option( 'bmew_lists' );
-			$listID = isset( $lists[$key]['customers'] ) ? $lists[$key]['customers'] : false;
+			$listID = bmew_frontend::match_list( 'customers' );
 			if( ! $listID ) { return; }
 			$page = empty( $_POST['page'] ) ? 1 : intval( $_POST['page'] );
 
@@ -144,8 +101,7 @@ function wp_ajax__bmew_action() {
 
 			// Find Appropriate Contact List
 			$key = get_option( 'bmew_key' );
-			$lists = get_option( 'bmew_lists' );
-			$listID = isset( $lists[$key]['abandons'] ) ? $lists[$key]['abandons'] : '';
+			$listID = bmew_frontend::match_list( 'abandons' );
 			if( ! $listID ) { return; }
 
 			// Get Fields From Order
@@ -230,17 +186,16 @@ add_action( 'woocommerce_checkout_update_order_meta', function( $order_id ) {
 
 	// Get Lists
 	$key = get_option( 'bmew_key' );
-	$lists = get_option( 'bmew_lists' );
 
 	// Remove From Abandons List
-	$listID = isset( $lists[$key]['abandons'] ) ? $lists[$key]['abandons'] : '';
+	$listID = bmew_frontend::match_list( 'abandons' );
 	bmew_api::delete_contact_by_email( $listID, $email );
 
 	// Proceed Only If Subscribe Selected
 	if( empty( $_POST['bmew_subscribe'] ) || $_POST['bmew_subscribe'] !== '1' ) { return; }
 
 	// Find Customers List
-	$listID = isset( $lists[$key]['customers'] ) ? $lists[$key]['customers'] : '';
+	$listID = bmew_frontend::match_list( 'customers' );
 	if( ! $listID ) { return; }
 
 	// Save Subscription Action To Order
@@ -272,8 +227,7 @@ add_action( 'woocommerce_add_to_cart', function() {
 
 	// Find Appropriate Contact List
 	$key = get_option( 'bmew_key' );
-	$lists = get_option( 'bmew_lists' );
-	$listID = isset( $lists[$key]['abandons'] ) ? $lists[$key]['abandons'] : '';
+	$listID = bmew_frontend::match_list( 'abandons' );
 	if( ! $listID ) { return; }
 
 	// Get Cart Items

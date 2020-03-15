@@ -214,11 +214,11 @@ class bmew_api {
 		if( ! $bmew_debug ) { return; }
 		$logger = wc_get_logger();
 		$context = [ 'source' => 'woo-benchmark-email' ];
-		$request = print_r( $request, true );
-		$response = print_r( $response, true );
-		$logger->info( "==URL== " . $url, $context );
-		$logger->debug( "==REQUEST== " . $request, $context );
-		$logger->debug( "==RESPONSE== " . $response, $context );
+		$message = sprintf(
+			"==URL== %s\n\n==REQUEST== %s\n\n==RESPONSE== %s",
+			$url, print_r( $request, true ), print_r( $response, true )
+		);
+		$logger->debug( $message, $context );
 	}
 
 

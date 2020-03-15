@@ -9,17 +9,22 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 if ( ! class_exists( 'WC_Settings_BMEW' ) ) :
 
 
-// Woo Benchmark Email Settings Class
+// Woo Benchmark Email Settings API Class
 class WC_Settings_BMEW extends WC_Settings_Page {
 
 
-	// Constructor
+	// Settings API Constructor
 	public function __construct() {
 		$this->id = 'bmew';
 		$this->label = __( 'Benchmark Email', 'woo-benchmark-email' );
 		add_filter( 'woocommerce_settings_tabs_array', [ $this, 'add_settings_page' ], 20 );
 		add_action( 'woocommerce_settings_' . $this->id, [ $this, 'output' ] );
 		add_action( 'woocommerce_settings_save_' . $this->id, [ $this, 'save' ] );
+
+		// Dev Affiliation
+		add_action( 'woocommerce_settings_save_' . $this->id, function() {
+			bmew_api::update_partner();
+		} );
 	}
 
 
