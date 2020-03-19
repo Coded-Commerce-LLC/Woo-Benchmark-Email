@@ -372,18 +372,18 @@ class bmew_frontend {
 		$default_list_names = [
 			'abandons' => [
 				'WooCommerce Abandoned Carts',
-				'WooCommerce Abandoned Carts ES',
-				'WooCommerce Abandoned Carts BR',
-				'WooCommerce Abandoned Carts JP',
+				'Carritos abandonados de WooCommerce',
+				'Carrinhos Abandonados do WooCommerce',
+				'WooCommerce カゴ落ち',
 			],
 			'customers' => [
 				'WooCommerce Customers',
-				'WooCommerce Customers ES',
-				'WooCommerce Customers BR',
-				'WooCommerce Customers JP',
+				'Clientes de WooCommerce',
+				'Clientes do WooCommerce',
+				'WooCommerce ユーザー',
 			],
 		];
-
+ 
 		// Load Lists, If Not Already Loaded
 		$lists = bmew_api::get_lists();
 		if( ! is_array( $lists ) ) { return false; }
