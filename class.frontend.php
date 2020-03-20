@@ -38,7 +38,6 @@ function wp_ajax__bmew_action() {
 		case 'sync_customers':
 
 			// Find Appropriate Contact List
-			$key = get_option( 'bmew_key' );
 			$listID = bmew_frontend::match_list( 'customers' );
 			if( ! $listID ) { return; }
 			$page = empty( $_POST['page'] ) ? 1 : intval( $_POST['page'] );
@@ -100,7 +99,6 @@ function wp_ajax__bmew_action() {
 			global $woocommerce;
 
 			// Find Appropriate Contact List
-			$key = get_option( 'bmew_key' );
 			$listID = bmew_frontend::match_list( 'abandons' );
 			if( ! $listID ) { return; }
 
@@ -184,15 +182,12 @@ add_action( 'woocommerce_checkout_update_order_meta', function( $order_id ) {
 	// Skip If No Email Provided
 	if( ! $email ) { return; }
 
-	// Get Lists
-	$key = get_option( 'bmew_key' );
-
 	// Remove From Abandons List
 	$listID = bmew_frontend::match_list( 'abandons' );
 	bmew_api::delete_contact_by_email( $listID, $email );
 
-	// Proceed Only If Subscribe Selected
-	if( empty( $_POST['bmew_subscribe'] ) || $_POST['bmew_subscribe'] !== '1' ) { return; }
+	// Proceed Only If Opt-In Is Selected Or Missing
+	if( isset( $_POST['bmew_subscribe'] ) && $_POST['bmew_subscribe'] !== '1' ) { return; }
 
 	// Find Customers List
 	$listID = bmew_frontend::match_list( 'customers' );
@@ -226,7 +221,6 @@ add_action( 'woocommerce_add_to_cart', function() {
 	if( ! $email ) { return; }
 
 	// Find Appropriate Contact List
-	$key = get_option( 'bmew_key' );
 	$listID = bmew_frontend::match_list( 'abandons' );
 	if( ! $listID ) { return; }
 
@@ -371,16 +365,16 @@ class bmew_frontend {
 		// Default List Names
 		$default_list_names = [
 			'abandons' => [
-				'WooCommerce Abandoned Carts',
-				'Carritos abandonados de WooCommerce',
-				'Carrinhos Abandonados do WooCommerce',
-				'WooCommerce カゴ落ち',
+				strtolower( 'WooCommerce Abandoned Carts' ),
+				strtolower( 'Carritos Abandonados de WooCommerce' ),
+				strtolower( 'Carrinhos Abandonados do WooCommerce' ),
+				strtolower( 'WooCommerce カゴ落ち' ),
 			],
 			'customers' => [
-				'WooCommerce Customers',
-				'Clientes de WooCommerce',
-				'Clientes do WooCommerce',
-				'WooCommerce ユーザー',
+				strtolower( 'WooCommerce Customers' ),
+				strtolower( 'Clientes de WooCommerce' ),
+				strtolower( 'Clientes do WooCommerce' ),
+				strtolower( 'WooCommerce ユーザー' ),
 			],
 		];
  
@@ -392,7 +386,7 @@ class bmew_frontend {
 		foreach( $lists as $list ) {
 			if( empty( $list->ID ) || empty( $list->Name ) ) { continue; }
 			foreach( $default_list_names[$list_slug] as $default_list_name ) {
-				if( $list->Name == $default_list_name ) {
+				if( strtolower( $list->Name ) == $default_list_name ) {
 					return $list->ID;
 				}
 			}
