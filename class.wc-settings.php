@@ -34,9 +34,6 @@ class WC_Settings_BMEW extends WC_Settings_Page {
 		// Dev Analytics
 		bmew_api::tracker( 'settings' );
 
-		// Load Messages
-		do_action( 'wp_dashboard_setup' );
-
 		// Return Settings Array
 		return apply_filters( 'woocommerce_' . $this->id . '_settings', [
 

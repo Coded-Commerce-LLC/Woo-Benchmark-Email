@@ -3,9 +3,9 @@ Contributors: seanconklin, randywsandberg
 Donate link: https://codedcommerce.com/donate
 Tags: WooCommerce, Abandoned cart, Drip campaigns, Email marketing automation, Benchmark Email
 Requires at least: 4.0.1
-Tested up to: 5.3.2
+Tested up to: 5.4
 Requires PHP: 5.6
-Stable tag: 1.4
+Stable tag: 1.5
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -56,8 +56,11 @@ Feature: Sync all order history to Woo Customers list
 
 == Changelog ==
 
-= 1.4 on 2020-03-XX =
-* Added: settings to select which lists are used for Abandons and Customers.
+= 1.5 on 2020-04-02 =
+* Fixed: Compatibility with other plugins that hook into wp_dashboard_setup.
+
+= 1.4 on 2020-03-19 =
+* Updated: function to select which lists are used for Abandons and Customers in common languages.
 * Updated: Removed caching of ListIDs to support translated list names.
 * Updated: Consolidated debug logger messages to single entries.
 * Fixed: plugins page settings link.
@@ -91,8 +94,10 @@ Feature: Sync all order history to Woo Customers list
 
 == Upgrade Notice ==
 
-= 1.4 = 
+= 1.5 = 
+* Bug fix release.
 
+= 1.4 = 
 * Bug fix release.
 
 = 1.3 = 
